@@ -1,4 +1,4 @@
-package controller;
+package com.example.covid.controller;
 
 
 import org.springframework.stereotype.Controller;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AdminController {
 
-    @GetMapping("/places")
+    @GetMapping("/locations")
     public String adminPlaces() {
-        return "admin/places";
+        return "admin/locations";
     }
 
-    @GetMapping("/places/{placeId}")
-    public String adminPlaceDetail(@PathVariable Integer placeId) {
-        return "admin/place-detail";
+    @GetMapping("/locations/{locationId}")
+    public String adminPlaceDetail(@PathVariable Integer locationId) {
+        return "admin/location-detail";
     }
 
     @GetMapping("/events")
