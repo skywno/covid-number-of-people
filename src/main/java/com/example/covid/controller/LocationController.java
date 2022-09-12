@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
-@RequestMapping("/places")
+@RequestMapping("/locations")
 @Controller
-public class PlaceController {
+public class LocationController {
 
     @GetMapping("/")
     public String places() {
-        return "place/index";
+        return "locations/index";
     }
 
-    @GetMapping("/{placeId}")
-    public String placeDetail(@PathVariable Integer placeId) {
-        return "place/detail";
+    @GetMapping("/{locationId}")
+    public String placeDetail(@PathVariable Integer locationId) {
+        return "locations/detail";
     }
 }
