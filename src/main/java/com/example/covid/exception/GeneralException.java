@@ -1,7 +1,10 @@
 package com.example.covid.exception;
 
 import com.example.covid.constant.ErrorCode;
+import lombok.Getter;
 
+
+@Getter
 public class GeneralException extends RuntimeException {
     private final ErrorCode errorCode;
 
