@@ -18,6 +18,6 @@ public class APIDataResponse extends com.example.covid.dto.APIErrorResponse {
     }
 
     public static APIDataResponse of (boolean success, Integer errorCode,String message, Object data) {
-        return new APIDataResponse(success, errorCode, message, data)
+        return new APIDataResponse(success, errorCode, message, data);
     }
 }
