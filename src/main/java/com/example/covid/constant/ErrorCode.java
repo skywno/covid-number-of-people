@@ -31,6 +31,14 @@ public enum ErrorCode {
         return Optional.ofNullable(message)
                 .filter(Predicate.not(String::isBlank))
                 .orElse(getMessage());
+
+    }
+    public boolean isClientSideError() {
+        return this.getErrorCategory() == ErrorCategory.CLIENT_SIDE;
+    }
+
+    public boolean isServerSideError() {
+        return this.getErrorCategory() == ErrorCategory.SERVER_SIDE;
     }
 
     @Override
