@@ -1,18 +1,31 @@
 package com.example.covid.controller;
 
 
+import com.example.covid.constant.LocationType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/admin")
 @Controller
 public class AdminController {
 
     @GetMapping("/locations")
-    public String adminPlaces() {
-        return "admin/locations";
+    public ModelAndView adminPlaces(
+            LocationType locationType, String locationName, String address
+    ) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("locationType", locationType);
+        model.put("locationName", locationName);
+        model.put("address", address);
+
+        return new ModelAndView("admin/locations", model);
     }
 
     @GetMapping("/locations/{locationId}")

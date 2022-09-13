@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    This is admin locations page.
+</p>
+<ul>location
+    <li>locationType: <span th:text="${locationType}">?</span></li>
+    <li>locationName: <span th:text="${locationName} ?: _">?</span></li>
+    <li>address: <span th:text="${address} ?: _">?</span></li>
+</ul>
+</body>
+</html>
