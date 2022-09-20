@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/covid-number-of-people.iml" filepath="$PROJECT_DIR$/.idea/covid-number-of-people.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/covid-waiting-in-line.iml" filepath="$PROJECT_DIR$/.idea/modules/covid-waiting-in-line.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/covid-waiting-in-line.main.iml" filepath="$PROJECT_DIR$/.idea/modules/covid-waiting-in-line.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/covid-waiting-in-line.test.iml" filepath="$PROJECT_DIR$/.idea/modules/covid-waiting-in-line.test.iml" />
     </modules>
   </component>
 </project>

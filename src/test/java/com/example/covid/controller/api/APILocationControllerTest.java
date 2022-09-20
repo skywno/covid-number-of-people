@@ -1,0 +1,156 @@
+package com.example.covid.controller.api;
+
+import com.example.covid.constant.ErrorCode;
+import com.example.covid.constant.LocationType;
+import com.example.covid.dto.LocationRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+
+@WebMvcTest(APILocationController.class)
+class APILocationControllerTest {
+
+    private final MockMvc mvc;
+    private final ObjectMapper mapper;
+
+    public APILocationControllerTest(
+            @Autowired MockMvc mvc,
+            @Autowired ObjectMapper mapper
+    ) {
+        this.mvc = mvc;
+        this.mapper = mapper;
+    }
+
+    @DisplayName("[API][GET] 장소 리스트 조회")
+    @Test
+    void givenNothing_whenRequestingLocations_thenReturnsListLocationsInStandardResponse() throws Exception {
+        // Given
+
+        // When & Then
+        mvc.perform(MockMvcRequestBuilders.get("/api/locations"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data[0].locationType").value(LocationType.COMMON.name()))
+                .andExpect(jsonPath("$.data[0].locationName").value("랄라배드민턴장"))
+                .andExpect(jsonPath("$.data[0].address").value("서울시 강남구 강남대로 1234"))
+                .andExpect(jsonPath("$.data[0].phoneNumber").value("010-1234-5678"))
+                .andExpect(jsonPath("$.data[0].capacity").value(30))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+    }
+
+    @DisplayName("[API][POST] 장소 생성")
+    @Test
+    void geolocation_whenCreatingAllocation_thenReturnsSuccessfulStandardResponse() throws Exception {
+        // Given
+        LocationRequest locationRequest = LocationRequest.of(
+                LocationType.COMMON,
+                "랄라배드민턴장",
+                "서울시 강남구 강남대로 1234",
+                "010-1234-5678",
+                30
+        );
+
+        // When & Then
+        mvc.perform(
+                        post("/api/locations")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(locationRequest))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+    }
+
+    @DisplayName("[API][GET] 단일 장소 조회 - 장소 있는 경우, 장소 데이터를 담은 표준 API 출력")
+    @Test
+    void givenLocationId_whenRequestingExistentLocation_thenReturnsLocationInStandardResponse() throws Exception {
+        // Given
+        long locationId = 1L;
+
+        // When & Then
+        mvc.perform(get("/api/locations/" + locationId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isMap())
+                .andExpect(jsonPath("$.data.locationType").value(LocationType.COMMON.name()))
+                .andExpect(jsonPath("$.data.locationName").value("랄라배드민턴장"))
+                .andExpect(jsonPath("$.data.address").value("서울시 강남구 강남대로 1234"))
+                .andExpect(jsonPath("$.data.phoneNumber").value("010-1234-5678"))
+                .andExpect(jsonPath("$.data.capacity").value(30))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+    }
+
+    @DisplayName("[API][GET] 단일 장소 조회 - 장소 없는 경우, 빈 표준 API 출력")
+    @Test
+    void givenLocationId_whenRequestingNonexistentLocation_thenReturnsEmptyStandardResponse() throws Exception {
+        // Given
+        long locationId = 2L;
+
+        // When & Then
+        mvc.perform(get("/api/locations/" + locationId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isEmpty())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+    }
+
+    @DisplayName("[API][PUT] 장소 변경")
+    @Test
+    void givenLocation_whenModifyingLocation_thenReturnsSuccessfulStandardResponse() throws Exception {
+        // Given
+        long locationId = 1L;
+        LocationRequest locationRequest = LocationRequest.of(
+                LocationType.COMMON,
+                "랄라배드민턴장",
+                "서울시 강남구 강남대로 1234",
+                "010-1234-5678",
+                30
+        );
+
+        // When & Then
+        mvc.perform(
+                        put("/api/locations/" + locationId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(locationRequest))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+    }
+
+    @DisplayName("[API][DELETE] 장소 삭제")
+    @Test
+    void givenLocation_whenDeletingAllocation_thenReturnsSuccessfulStandardResponse() throws Exception {
+        // Given
+        long locationId = 1L;
+
+        // When & Then
+        mvc.perform(delete("/api/locations/" + locationId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+    }
+
+}
