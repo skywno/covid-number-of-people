@@ -1,5 +1,6 @@
 package com.example.covid.controller.error;
 
+import com.example.covid.controller.BaseController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest
+@WebMvcTest(BaseErrorController.class)
 class BaseErrorControllerTest {
     private final MockMvc mvc;
 
