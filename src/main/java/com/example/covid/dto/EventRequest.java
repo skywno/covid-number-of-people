@@ -5,34 +5,45 @@ import com.example.covid.constant.EventStatus;
 import java.time.LocalDateTime;
 
 public record EventRequest(
-        Long placeId,
+        Long locationId,
         String eventName,
         EventStatus eventStatus,
-        LocalDateTime eventStartDatetime,
-        LocalDateTime eventEndDatetime,
+        LocalDateTime eventStartDateTime,
+        LocalDateTime eventEndDateTime,
         Integer currentNumberOfPeople,
-        Integer capacity,
-        String memo
+        Integer capacity
 ) {
     public static EventRequest of(
-            Long placeId,
+            Long locationId,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime,
             Integer currentNumberOfPeople,
-            Integer capacity,
-            String memo
+            Integer capacity
     ) {
         return new EventRequest(
-                placeId,
+                locationId,
                 eventName,
                 eventStatus,
                 eventStartDatetime,
                 eventEndDatetime,
                 currentNumberOfPeople,
+                capacity
+        );
+    }
+
+    public EventDTO toDTO() {
+        return EventDTO.of(
+                locationId,
+                eventName,
+                eventStatus,
+                eventStartDateTime,
+                eventEndDateTime,
+                currentNumberOfPeople,
                 capacity,
-                memo
+                null,
+                null
         );
     }
 }

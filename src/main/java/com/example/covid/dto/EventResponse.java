@@ -31,4 +31,18 @@ public record EventResponse(
                 capacity
         );
     }
+
+    public static EventResponse from(EventDTO eventDTO) {
+        if (eventDTO == null) {return null;}
+
+        return EventResponse.of(
+                eventDTO.locationId(),
+                eventDTO.eventName(),
+                eventDTO.eventStatus(),
+                eventDTO.eventStartDateTime(),
+                eventDTO.eventEndDateTime(),
+                eventDTO.currentNumberOfPeople(),
+                eventDTO.capacity()
+        );
+    }
 }
