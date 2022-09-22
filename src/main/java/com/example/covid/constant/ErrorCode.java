@@ -16,15 +16,18 @@ public enum ErrorCode {
     OK(0, NORMAL, "Ok"),
     BAD_REQUEST(10000, CLIENT_SIDE, "Bad request"),
     SPRING_BAD_REQUEST(10001, CLIENT_SIDE, "Spring-detected bad request"),
+    VALIDATION_ERROR(100002, CLIENT_SIDE, "Validation error"),
+    DATA_ACCESS_ERROR(10003, CLIENT_SIDE, "Data access error"),
     INTERNAL_ERROR(20000, SERVER_SIDE, "Internal error"),
     SPRING_INTERNAL_ERROR(20001, SERVER_SIDE, "Spring-detected internal error");
+
 
     private final Integer code;
     private final ErrorCategory errorCategory;
     private final String message;
 
     public String getMessage(Exception e) {
-        return getMessage(e.getMessage());
+        return getMessage(this.getMessage() + " - " + e.getMessage());
     }
 
     public String getMessage(String message) {
@@ -42,7 +45,7 @@ public enum ErrorCode {
     }
 
     @Override
-    public String toString() {return String.format("%s {%d}", name(), this.getCode());}
+    public String toString() {return String.format("%s (%d)", name(), this.getCode());}
 
     public enum ErrorCategory {
         NORMAL, CLIENT_SIDE, SERVER_SIDE
