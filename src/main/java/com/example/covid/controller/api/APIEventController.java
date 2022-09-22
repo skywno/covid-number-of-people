@@ -10,13 +10,18 @@ import com.example.covid.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 
+@Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/events")
@@ -25,9 +30,9 @@ public class APIEventController {
     private final EventService eventService;
     @GetMapping
     public APIDataResponse<List<EventResponse>> getEvents(
-            @RequestParam(required = false) Long locationId,
-            @RequestParam(required = false) String eventName,
-            @RequestParam(required = false) EventStatus eventStatus,
+            @Positive Long locationId,
+            @Size(min = 2) @NotBlank String eventName,
+            EventStatus eventStatus,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime
     ) {
@@ -44,14 +49,16 @@ public class APIEventController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public APIDataResponse<String> createEvent(
-            @RequestBody EventRequest eventRequest
+            @Valid @RequestBody EventRequest eventRequest
     ) {
         Boolean result = eventService.createEvent(eventRequest.toDTO());
         return APIDataResponse.of(result.toString());
     }
 
     @GetMapping("/{eventId}")
-    public APIDataResponse<EventResponse> getEvent(@PathVariable Long eventId) {
+    public APIDataResponse<EventResponse> getEvent(
+            @Positive @PathVariable Long eventId
+    ) {
         EventResponse eventResponse = EventResponse.from(
                 eventService.getEvent(eventId).orElse(null)
         );
@@ -61,15 +68,15 @@ public class APIEventController {
 
     @PutMapping("/{eventId}")
     public APIDataResponse<String> modifyEvent(
-            @PathVariable Long eventId,
-            @RequestBody EventRequest eventRequest
+            @Positive @PathVariable Long eventId,
+            @Valid @RequestBody EventRequest eventRequest
     ) {
         Boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
         return APIDataResponse.of(result.toString());
     }
 
     @DeleteMapping("/{eventId}")
-    public APIDataResponse<String> deleteEvent(@PathVariable Long eventId){
+    public APIDataResponse<String> deleteEvent(@Positive @PathVariable Long eventId){
         Boolean result = eventService.removeEvent(eventId);
         return APIDataResponse.of(result.toString());
     }

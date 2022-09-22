@@ -2,16 +2,17 @@ package com.example.covid.dto;
 
 import com.example.covid.constant.EventStatus;
 
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public record EventRequest(
-        Long locationId,
-        String eventName,
-        EventStatus eventStatus,
-        LocalDateTime eventStartDateTime,
-        LocalDateTime eventEndDateTime,
-        Integer currentNumberOfPeople,
-        Integer capacity
+        @NotNull @Positive Long locationId,
+        @NotBlank @Size(min = 2) String eventName,
+        @NotNull EventStatus eventStatus,
+        @NotNull LocalDateTime eventStartDateTime,
+        @NotNull LocalDateTime eventEndDateTime,
+        @NotNull @PositiveOrZero Integer currentNumberOfPeople,
+        @NotNull @Positive Integer capacity
 ) {
     public static EventRequest of(
             Long locationId,
