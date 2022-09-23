@@ -2,37 +2,50 @@ package com.example.covid.dto;
 
 import com.example.covid.constant.EventStatus;
 
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public record EventRequest(
-        Long placeId,
-        String eventName,
-        EventStatus eventStatus,
-        LocalDateTime eventStartDatetime,
-        LocalDateTime eventEndDatetime,
-        Integer currentNumberOfPeople,
-        Integer capacity,
-        String memo
+        @NotNull @Positive Long locationId,
+        @NotBlank @Size(min = 2) String eventName,
+        @NotNull EventStatus eventStatus,
+        @NotNull LocalDateTime eventStartDateTime,
+        @NotNull LocalDateTime eventEndDateTime,
+        @NotNull @PositiveOrZero Integer currentNumberOfPeople,
+        @NotNull @Positive Integer capacity
 ) {
     public static EventRequest of(
-            Long placeId,
+            Long locationId,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime,
             Integer currentNumberOfPeople,
-            Integer capacity,
-            String memo
+            Integer capacity
     ) {
         return new EventRequest(
-                placeId,
+                locationId,
                 eventName,
                 eventStatus,
                 eventStartDatetime,
                 eventEndDatetime,
                 currentNumberOfPeople,
+                capacity
+        );
+    }
+
+    public EventDTO toDTO() {
+        return EventDTO.of(
+                null,
+                locationId,
+                eventName,
+                eventStatus,
+                eventStartDateTime,
+                eventEndDateTime,
+                currentNumberOfPeople,
                 capacity,
-                memo
+                null,
+                null
         );
     }
 }
