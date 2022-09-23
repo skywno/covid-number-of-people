@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
 <body>
 <p>
-  <span id="eventsTitle" data-th-text="'이벤트 목록'">This is events page.</span>
+  <span id="eventsTitle">This is events page.</span>
 </p>
 <table id="eventsTable">
   <thead>
@@ -21,15 +21,15 @@
     <th>상세</th>
   </tr>
   </thead>
-  <tbody data-th-remove="all-but-first">
-  <tr data-th-each="event : ${events}">
-    <td class="placeId" data-th-text="${event.id} ?: _">1</td>
-    <td class="eventName" data-th-text="${event.eventName} ?: _">테스트 이벤트</td>
-    <td class="eventStatus" data-th-text="${event.eventStatus} ?: _" >OPENED</td>
-    <td class="eventStartDatetime" data-th-text="${event.eventStartDateTime} ?: _">2021-01-01 09:00:00</td>
-    <td class="eventEndDatetime" data-th-text="${event.eventEndDateTime} ?: _">2021-01-01 10:00:00</td>
-    <td class="currentNumberOfPeople" data-th-text="${event.currentNumberOfPeople} ?: _">0</td>
-    <td class="capacity" data-th-text="${event.capacity} ?: _">10</td>
+  <tbody>
+  <tr>
+    <td class="eventId">1</td>
+    <td class="eventName">테스트 이벤트</td>
+    <td class="eventStatus">OPENED</td>
+    <td class="eventStartDatetime">2021-01-01 09:00:00</td>
+    <td class="eventEndDatetime">2021-01-01 10:00:00</td>
+    <td class="currentNumberOfPeople" >0</td>
+    <td class="capacity">10</td>
     <td><a>상세</a></td>
   </tr>
   </tbody>
