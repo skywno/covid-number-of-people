@@ -3,68 +3,82 @@ package com.example.covid.controller.api;
 
 import com.example.covid.constant.EventStatus;
 import com.example.covid.dto.APIDataResponse;
+import com.example.covid.dto.EventDTO;
 import com.example.covid.dto.EventRequest;
 import com.example.covid.dto.EventResponse;
+import com.example.covid.service.EventService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
 
+@Validated
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/events")
 public class APIEventController {
 
+    private final EventService eventService;
     @GetMapping
-    public APIDataResponse<List<EventResponse>> getEvents() {
-        return APIDataResponse.of(List.of(EventResponse.of(
-                1L,
-                "오후 운동",
-                EventStatus.OPENED,
-                LocalDateTime.of(2021,1,1,13,0,0),
-                LocalDateTime.of(2021,1,1,16,0,0),
-                0,
-                24
+    public APIDataResponse<List<EventResponse>> getEvents(
+            @Positive Long locationId,
+            @Size(min = 2) @NotBlank String eventName,
+            EventStatus eventStatus,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime
+    ) {
+        List<EventDTO> response = eventService.getEvents(locationId, eventName,
+                eventStatus, eventStartDateTime, eventEndDateTime);
 
-        )));
+        return APIDataResponse.of(
+                response.stream()
+                        .map(EventResponse::from)
+                        .toList()
+        );
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public APIDataResponse<EventResponse> createEvent(
-            @RequestBody EventRequest eventRequest
+    public APIDataResponse<String> createEvent(
+            @Valid @RequestBody EventRequest eventRequest
     ) {
-        return APIDataResponse.empty();
+        Boolean result = eventService.createEvent(eventRequest.toDTO());
+        return APIDataResponse.of(result.toString());
     }
 
     @GetMapping("/{eventId}")
-    public APIDataResponse<EventResponse> getEvent(@PathVariable Long eventId) {
-        if (eventId.equals(2L)) {
-            return APIDataResponse.empty();
-        }
+    public APIDataResponse<EventResponse> getEvent(
+            @Positive @PathVariable Long eventId
+    ) {
+        EventResponse eventResponse = EventResponse.from(
+                eventService.getEvent(eventId).orElse(null)
+        );
 
-        return APIDataResponse.of(EventResponse.of(
-                1L,
-                "오후 운동",
-                EventStatus.OPENED,
-                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
-                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
-                0,
-                24
-        ));
+        return APIDataResponse.of(eventResponse);
     }
 
     @PutMapping("/{eventId}")
-    public APIDataResponse<Void> modifyEvent(
-            @PathVariable Long eventId,
-            @RequestBody EventRequest eventRequest
+    public APIDataResponse<String> modifyEvent(
+            @Positive @PathVariable Long eventId,
+            @Valid @RequestBody EventRequest eventRequest
     ) {
-        return APIDataResponse.empty();
+        Boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
+        return APIDataResponse.of(result.toString());
     }
 
     @DeleteMapping("/{eventId}")
-    public APIDataResponse<Void> deleteEvent(@PathVariable Long eventId){
-        return APIDataResponse.empty();
+    public APIDataResponse<String> deleteEvent(@Positive @PathVariable Long eventId){
+        Boolean result = eventService.removeEvent(eventId);
+        return APIDataResponse.of(result.toString());
     }
+
 }
