@@ -36,6 +36,7 @@ public record EventRequest(
 
     public EventDTO toDTO() {
         return EventDTO.of(
+                null,
                 locationId,
                 eventName,
                 eventStatus,
