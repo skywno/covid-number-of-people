@@ -4,7 +4,7 @@
     <attr sel="#eventsTable">
         <attr sel="tbody">
             <attr sel="tr[0]" th:each="event : ${events}">
-                <attr sel="td.eventId" th:text="${event.id}" />
+                <attr sel="td.locationId" th:text="${event.locationId}" />
                 <attr sel="td.eventName" th:text="${event.eventName}" />
                 <attr sel="td.eventStatus" th:text="${event.eventStatus}" />
                 <attr sel="td.eventStartDatetime" th:text="${event.eventStartDateTime}" />
