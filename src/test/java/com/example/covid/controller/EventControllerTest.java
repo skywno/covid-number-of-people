@@ -11,8 +11,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(EventController.class)
@@ -34,7 +33,10 @@ class EventControllerTest {
                 .contentType(MediaType.TEXT_HTML)
             )
                 .andExpect(status().isOk())
-                .andExpect(view().name("event/index")   );
+                .andExpect(view().name("event/index"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("events"));
+
 
     }
 
