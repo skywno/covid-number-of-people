@@ -39,20 +39,20 @@ public class Event {
     private Long locationId;
 
     @Setter
-    @Column(insertable = false, nullable = false,
+    @Column(nullable = false,
             columnDefinition = "varchar DEFAULT 'OPENED'")
-    private EventStatus status;
+    @Enumerated(EnumType.STRING)
     private EventStatus eventStatus;
 
 
     @Setter
-    @Column(insertable = false, updatable = false, nullable = false,
+    @Column(nullable = false,
             columnDefinition = "datetime")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime eventStartDateTime;
 
     @Setter
-    @Column(insertable = false, updatable = false, nullable = false,
+    @Column(nullable = false,
             columnDefinition = "datetime")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime eventEndDateTime;
