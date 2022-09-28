@@ -35,18 +35,18 @@ public record EventResponse(
         );
     }
 
-    public static EventResponse from(EventDTO eventDTO) {
-        if (eventDTO == null) {return null;}
+    public static EventResponse from(EventDto eventDto) {
+        if (eventDto == null) {return null;}
 
         return EventResponse.of(
-                eventDTO.id(),
-                eventDTO.locationId(),
-                eventDTO.eventName(),
-                eventDTO.eventStatus(),
-                eventDTO.eventStartDateTime(),
-                eventDTO.eventEndDateTime(),
-                eventDTO.currentNumberOfPeople(),
-                eventDTO.capacity()
+                eventDto.id(),
+                eventDto.locationId(),
+                eventDto.eventName(),
+                eventDto.eventStatus(),
+                eventDto.eventStartDateTime(),
+                eventDto.eventEndDateTime(),
+                eventDto.currentNumberOfPeople(),
+                eventDto.capacity()
         );
     }
 }
