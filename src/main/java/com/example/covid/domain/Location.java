@@ -10,7 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 
@@ -55,10 +54,6 @@ public class Location {
     private Integer capacity;
 
 
-    @Setter
-    private String memo;
-
-
     @Column(nullable = false, insertable = false, updatable = false,
             columnDefinition = "datetime default CURRENT_TIMESTAMP")
     @CreatedDate
@@ -79,15 +74,13 @@ public class Location {
             String locationName,
             String address,
             String phoneNumber,
-            Integer capacity,
-            String memo
+            Integer capacity
     ) {
         this.locationType = locationType;
         this.locationName = locationName;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.capacity = capacity;
-        this.memo = memo;
     }
 
     public static Location of(
@@ -95,10 +88,9 @@ public class Location {
             String locationName,
             String address,
             String phoneNumber,
-            Integer capacity,
-            String memo
+            Integer capacity
     ) {
         return new Location(locationType, locationName, address, phoneNumber,
-                capacity, memo);
+                capacity);
     }
 }

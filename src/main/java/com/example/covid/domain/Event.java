@@ -48,13 +48,13 @@ public class Event {
     @Column(insertable = false, updatable = false, nullable = false,
             columnDefinition = "datetime")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime startTime;
+    private LocalDateTime eventStartDateTime;
 
     @Setter
     @Column(insertable = false, updatable = false, nullable = false,
             columnDefinition = "datetime")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime endTime;
+    private LocalDateTime eventEndDateTime;
 
     @Setter
     @Column(nullable = false, columnDefinition = "integer default 0")
@@ -78,13 +78,13 @@ public class Event {
     }
 
     public Event(String name, Long locationId, EventStatus status,
-                 LocalDateTime startTime, LocalDateTime endTime,
+                 LocalDateTime eventStartDateTime, LocalDateTime eventEndDateTime,
                  Integer currentNumberOfPeople, Integer capacity) {
         this.name = name;
         this.locationId = locationId;
         this.status = status;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.eventStartDateTime = eventStartDateTime;
+        this.eventEndDateTime = eventEndDateTime;
         this.currentNumberOfPeople = currentNumberOfPeople;
         this.capacity = capacity;
     }
@@ -92,7 +92,7 @@ public class Event {
 
     public static Event of(
             String eventName,
-            Long placeId,
+            Long locationId,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime,
@@ -101,7 +101,7 @@ public class Event {
     ) {
         return new Event(
                 eventName,
-                placeId,
+                locationId,
                 eventStatus,
                 eventStartDatetime,
                 eventEndDatetime,

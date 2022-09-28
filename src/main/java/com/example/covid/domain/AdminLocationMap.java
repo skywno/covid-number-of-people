@@ -1,16 +1,28 @@
 package com.example.covid.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@ToString
+@EqualsAndHashCode
+@Table(indexes = {
+        @Index(columnList = "adminId"),
+        @Index(columnList = "locationId"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "modifiedAt")
+})
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class AdminLocationMap {
 
     @JsonIgnore
