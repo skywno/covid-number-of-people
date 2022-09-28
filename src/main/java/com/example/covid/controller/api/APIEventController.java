@@ -3,7 +3,7 @@ package com.example.covid.controller.api;
 
 import com.example.covid.constant.EventStatus;
 import com.example.covid.dto.APIDataResponse;
-import com.example.covid.dto.EventDTO;
+import com.example.covid.dto.EventDto;
 import com.example.covid.dto.EventRequest;
 import com.example.covid.dto.EventResponse;
 import com.example.covid.service.EventService;
@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-@Validated
+//@Validated
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/api/events")
+//@RestController
+//@RequestMapping("/api/events")
 public class APIEventController {
 
     private final EventService eventService;
@@ -36,7 +36,7 @@ public class APIEventController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime
     ) {
-        List<EventDTO> response = eventService.getEvents(locationId, eventName,
+        List<EventDto> response = eventService.getEvents(locationId, eventName,
                 eventStatus, eventStartDateTime, eventEndDateTime);
 
         return APIDataResponse.of(

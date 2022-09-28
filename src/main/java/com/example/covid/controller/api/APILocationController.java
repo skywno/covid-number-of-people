@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/locations")
-@RestController
+//@RequestMapping("/api/locations")
+//@RestController
 public class APILocationController {
 
     @GetMapping

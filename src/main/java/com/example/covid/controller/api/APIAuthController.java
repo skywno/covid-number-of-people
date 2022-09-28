@@ -6,8 +6,8 @@ import com.example.covid.dto.APIDataResponse;
 import com.example.covid.dto.LoginRequest;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api")
+//@RestController
+//@RequestMapping("/api")
 public class APIAuthController {
 
     @PostMapping("/sign-up")
