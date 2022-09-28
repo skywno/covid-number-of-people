@@ -18,9 +18,9 @@ public interface EventRepository extends
     @Override
     default void customize(QuerydslBindings bindings, QEvent root) {
         bindings.excludeUnlistedProperties(true);
-        bindings.including(root.locationId, root.name, root.status,
+        bindings.including(root.locationId, root.eventName, root.eventStatus,
                 root.eventStartDateTime, root.eventEndDateTime);
-        bindings.bind(root.name).first(StringExpression::likeIgnoreCase);
+        bindings.bind(root.eventName).first(StringExpression::contains);
         bindings.bind(root.eventStartDateTime).first(ComparableExpression::goe);
         bindings.bind(root.eventEndDateTime).first(ComparableExpression::loe);
     }

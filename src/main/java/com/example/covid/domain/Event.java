@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @Table(indexes = {
         @Index(columnList = "locationId"),
         @Index(columnList = "eventName"),
-        @Index(columnList = "eventStartDatetime"),
-        @Index(columnList = "eventEndDatetime"),
+        @Index(columnList = "eventStartDateTime"),
+        @Index(columnList = "eventEndDateTime"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "modifiedAt")
 })
@@ -32,7 +32,7 @@ public class Event {
 
     @Setter
     @Column(nullable = false)
-    private String name;
+    private String eventName;
 
     @Setter
     @Column(nullable = false)
@@ -42,6 +42,7 @@ public class Event {
     @Column(insertable = false, nullable = false,
             columnDefinition = "varchar DEFAULT 'OPENED'")
     private EventStatus status;
+    private EventStatus eventStatus;
 
 
     @Setter
@@ -59,6 +60,7 @@ public class Event {
     @Setter
     @Column(nullable = false, columnDefinition = "integer default 0")
     private Integer currentNumberOfPeople;
+
     @Setter
     @Column(nullable = false)
     private Integer capacity;
@@ -77,12 +79,12 @@ public class Event {
     protected Event() {
     }
 
-    public Event(String name, Long locationId, EventStatus status,
+    public Event(String eventName, Long locationId, EventStatus status,
                  LocalDateTime eventStartDateTime, LocalDateTime eventEndDateTime,
                  Integer currentNumberOfPeople, Integer capacity) {
-        this.name = name;
+        this.eventName = eventName;
         this.locationId = locationId;
-        this.status = status;
+        this.eventStatus = status;
         this.eventStartDateTime = eventStartDateTime;
         this.eventEndDateTime = eventEndDateTime;
         this.currentNumberOfPeople = currentNumberOfPeople;

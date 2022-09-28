@@ -42,8 +42,8 @@ public record EventDto(
         return new EventDto(
                 event.getId(),
                 event.getLocationId(),
-                event.getName(),
-                event.getStatus(),
+                event.getEventName(),
+                event.getEventStatus(),
                 event.getEventStartDateTime(),
                 event.getEventEndDateTime(),
                 event.getCurrentNumberOfPeople(),
@@ -67,8 +67,8 @@ public record EventDto(
 
     public Event updateEntity(Event event) {
         if (locationId != null) { event.setLocationId(locationId); }
-        if (eventName != null) { event.setName(eventName); }
-        if (eventStatus != null) { event.setStatus(eventStatus); }
+        if (eventName != null) { event.setEventName(eventName); }
+        if (eventStatus != null) { event.setEventStatus(eventStatus); }
         if (eventStartDateTime != null) { event.setEventStartDateTime(eventStartDateTime); }
         if (eventEndDateTime != null) { event.setEventEndDateTime(eventEndDateTime); }
         if (currentNumberOfPeople != null) { event.setCurrentNumberOfPeople(currentNumberOfPeople); }

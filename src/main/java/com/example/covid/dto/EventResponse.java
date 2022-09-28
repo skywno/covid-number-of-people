@@ -39,7 +39,7 @@ public record EventResponse(
         if (eventDto == null) {return null;}
 
         return EventResponse.of(
-                eventDto.id(),  
+                eventDto.id(),
                 eventDto.locationId(),
                 eventDto.eventName(),
                 eventDto.eventStatus(),
