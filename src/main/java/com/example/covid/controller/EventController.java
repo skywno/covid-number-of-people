@@ -1,7 +1,12 @@
 package com.example.covid.controller;
 
 import com.example.covid.constant.EventStatus;
+import com.example.covid.domain.Event;
 import com.example.covid.dto.EventResponse;
+import com.example.covid.service.EventService;
+import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,32 +21,21 @@ import java.util.Map;
 
 @RequestMapping("/events")
 @Controller
+@RequiredArgsConstructor
 public class EventController {
 
+    private final EventService eventService;
+
     @GetMapping
-    public ModelAndView events() {
+    public ModelAndView events(@QuerydslPredicate(root= Event.class) Predicate predicate) {
         Map<String, Object> map = new HashMap<>();
 
-        // TODO: 임시 데이터. 추후 삭제 예정
-        map.put("events", List.of(EventResponse.of(
-                1L,
-                1L,
-                "오후 운동",
-                EventStatus.OPENED,
-                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
-                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
-                0,
-                24
-        ), EventResponse.of(
-                2L,
-                1L,
-                "오후 운동",
-                EventStatus.OPENED,
-                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
-                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
-                0,
-                24)
-        ));
+        List<EventResponse> events = eventService.getEvents(predicate)
+                .stream()
+                .map(EventResponse::from)
+                .toList();
+
+        map.put("events", events);
 
         return new ModelAndView("event/index", map);
     }

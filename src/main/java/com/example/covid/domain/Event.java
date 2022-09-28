@@ -1,18 +1,114 @@
 package com.example.covid.domain;
 
 import com.example.covid.constant.EventStatus;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigInteger;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@ToString
+@EqualsAndHashCode
+@Table(indexes = {
+        @Index(columnList = "locationId"),
+        @Index(columnList = "eventName"),
+        @Index(columnList = "eventStartDateTime"),
+        @Index(columnList = "eventEndDateTime"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "modifiedAt")
+})
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class Event {
-    private BigInteger id;
-    private String name;
-    private EventStatus status;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+
+    @Setter(AccessLevel.PRIVATE)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Setter
+    @Column(nullable = false)
+    private String eventName;
+
+    @Setter
+    @Column(nullable = false)
+    private Long locationId;
+
+    @Setter
+    @Column(nullable = false,
+            columnDefinition = "varchar DEFAULT 'OPENED'")
+    @Enumerated(EnumType.STRING)
+    private EventStatus eventStatus;
+
+
+    @Setter
+    @Column(nullable = false,
+            columnDefinition = "datetime")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime eventStartDateTime;
+
+    @Setter
+    @Column(nullable = false,
+            columnDefinition = "datetime")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime eventEndDateTime;
+
+    @Setter
+    @Column(nullable = false, columnDefinition = "integer default 0")
     private Integer currentNumberOfPeople;
+
+    @Setter
+    @Column(nullable = false)
     private Integer capacity;
+
+    @Column(nullable = false, insertable = false, updatable = false,
+            columnDefinition = "datetime default CURRENT_TIMESTAMP")
+    @CreatedDate
     private LocalDateTime createdAt;
+
+    @Column(nullable = false, insertable = false, updatable = false,
+            columnDefinition = "datetime default CURRENT_TIMESTAMP on update " +
+                    "CURRENT_TIMESTAMP")
+    @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    protected Event() {
+    }
+
+    public Event(String eventName, Long locationId, EventStatus status,
+                 LocalDateTime eventStartDateTime, LocalDateTime eventEndDateTime,
+                 Integer currentNumberOfPeople, Integer capacity) {
+        this.eventName = eventName;
+        this.locationId = locationId;
+        this.eventStatus = status;
+        this.eventStartDateTime = eventStartDateTime;
+        this.eventEndDateTime = eventEndDateTime;
+        this.currentNumberOfPeople = currentNumberOfPeople;
+        this.capacity = capacity;
+    }
+
+
+    public static Event of(
+            String eventName,
+            Long locationId,
+            EventStatus eventStatus,
+            LocalDateTime eventStartDatetime,
+            LocalDateTime eventEndDatetime,
+            Integer currentNumberOfPeople,
+            Integer capacity
+    ) {
+        return new Event(
+                eventName,
+                locationId,
+                eventStatus,
+                eventStartDatetime,
+                eventEndDatetime,
+                currentNumberOfPeople,
+                capacity
+        );
+    }
 }

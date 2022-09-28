@@ -2,12 +2,11 @@ package com.example.covid.controller.api;
 
 import com.example.covid.constant.ErrorCode;
 import com.example.covid.constant.EventStatus;
-import com.example.covid.dto.EventDTO;
+import com.example.covid.dto.EventDto;
 import com.example.covid.dto.EventRequest;
-import com.example.covid.dto.EventResponse;
 import com.example.covid.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.core.StringContains;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,12 @@ import java.util.Optional;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
 @WebMvcTest(APIEventController.class)
 class APIEventControllerTest {
 
@@ -225,7 +223,7 @@ class APIEventControllerTest {
     void givenEvent_whenModifyingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
         long eventId = 1L;
-        EventDTO dto = createEventDTO();
+        EventDto dto = createEventDTO();
         EventRequest eventRequest = EventRequest.of(
                 1L,
                 "오후 운동",
@@ -258,7 +256,7 @@ class APIEventControllerTest {
     void givenWrongEvent_whenModifyingAnEvent_thenReturnsFailedStandardResponse() throws Exception {
         // Given
         long eventId = 1L;
-        EventDTO dto = createEventDTO();
+        EventDto dto = createEventDTO();
         EventRequest eventRequest = EventRequest.of(
                 1L,
                 null,
@@ -302,8 +300,8 @@ class APIEventControllerTest {
 
     }
 
-    private EventDTO createEventDTO() {
-        return EventDTO.of(
+    private EventDto createEventDTO() {
+        return EventDto.of(
                 1L,
                 1L,
                 "오후 운동",

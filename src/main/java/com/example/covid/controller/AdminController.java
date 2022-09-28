@@ -3,18 +3,15 @@ package com.example.covid.controller;
 
 import com.example.covid.constant.EventStatus;
 import com.example.covid.constant.LocationType;
-import com.example.covid.dto.EventDTO;
+import com.example.covid.dto.EventDto;
 import com.example.covid.dto.LocationDTO;
-import org.springframework.cglib.core.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +68,7 @@ public class AdminController {
     @GetMapping("/events/{eventId}")
     public ModelAndView adminEventDetail(@PathVariable Long eventId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("event", EventDTO.of(
+        map.put("event", EventDto.of(
                 eventId,
                 1L,
                 "오후 운동",
