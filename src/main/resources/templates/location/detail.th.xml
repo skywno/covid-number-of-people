@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<thlogic>
+    <attr sel="#locationTitle" th:text="'장소 상세'" />
+    <attr sel="#locationTable" th:object="${location}">
+        <attr sel="#locationType" th:text="*{locationeType} ?: _" />
+        <attr sel="#locationName" th:text="*{locationName} ?: _" />
+        <attr sel="#address" th:text="*{address} ?: _" />
+        <attr sel="#phoneNumber" th:text="*{phoneNumber} ?: _" />
+        <attr sel="#capacity" th:text="*{capacity} ?: _" />
+    </attr>
+    <attr sel="#backToPlaces" th:href="@{/locations}" />
+</thlogic>
