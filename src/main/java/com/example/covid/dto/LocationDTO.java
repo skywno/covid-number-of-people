@@ -4,26 +4,24 @@ import com.example.covid.constant.LocationType;
 
 import java.time.LocalDateTime;
 
-public record LocationDTO(
+public record LocationDto(
         LocationType locationType,
         String locationName,
         String address,
         String phoneNumber,
         Integer capacity,
-        String memo,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt
 ) {
-    public static LocationDTO of(
+    public static LocationDto of(
         LocationType locationType,
         String locationName,
         String address,
         String phoneNumber,
         Integer capacity,
-        String memo,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt
 ) {
-    return new LocationDTO(locationType, locationName, address, phoneNumber, capacity, memo, createdAt, modifiedAt);
+    return new LocationDto(locationType, locationName, address, phoneNumber, capacity, createdAt, modifiedAt);
 }
 }
