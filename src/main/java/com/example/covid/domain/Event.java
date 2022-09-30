@@ -40,7 +40,7 @@ public class Event {
 
     @Setter
     @Column(nullable = false,
-            columnDefinition = "varchar DEFAULT 'OPENED'")
+            columnDefinition = "varchar(20) DEFAULT \"OPENED\"")
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus;
 

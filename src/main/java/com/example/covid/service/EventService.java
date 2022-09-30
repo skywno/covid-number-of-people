@@ -19,12 +19,14 @@ import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class EventService {
 
     private final EventRepository eventRepository;
     private final LocationRepository locationRepository;
+
 
     @Transactional(readOnly = true)
     public List<EventDto> getEvents(Predicate predicate) {
@@ -37,6 +39,7 @@ public class EventService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<EventDto> getEvents(
             Long locationId,
             String eventName,
@@ -47,6 +50,7 @@ public class EventService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public Optional<EventDto> getEvent(Long eventId) {
         try {
             return eventRepository.findById(eventId).map(EventDto::of);
@@ -55,6 +59,7 @@ public class EventService {
         }
     }
 
+    @Transactional
     public boolean createEvent(EventDto eventDto) {
         try {
             if (eventDto == null) {
@@ -71,6 +76,7 @@ public class EventService {
         }
     }
 
+    @Transactional
     public boolean modifyEvent(Long eventId, EventDto dto) {
         try {
             if (eventId == null || dto == null) {
@@ -84,6 +90,7 @@ public class EventService {
         }
     }
 
+    @Transactional
     public boolean removeEvent(Long eventId) {
         try {
             if (eventId == null) {

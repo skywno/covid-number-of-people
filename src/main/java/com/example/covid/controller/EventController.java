@@ -1,6 +1,7 @@
 package com.example.covid.controller;
 
 import com.example.covid.constant.EventStatus;
+import com.example.covid.constant.LocationType;
 import com.example.covid.domain.Event;
 import com.example.covid.dto.EventResponse;
 import com.example.covid.dto.LocationDto;
@@ -50,7 +51,7 @@ public class EventController {
                 eventId,
                 LocationDto.of(
                         1L,
-                        PlaceType.SPORTS,
+                        LocationType.SPORTS,
                         "배드민턴장",
                         "서울시 그리구 그래동",
                         "010-2222-3333",

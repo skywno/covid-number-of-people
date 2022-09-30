@@ -36,7 +36,7 @@ public class Location {
 
 
     @Setter
-    @Column(nullable = false, columnDefinition = "varchar default 'COMMON'")
+    @Column(nullable = false, columnDefinition = "varchar(20) default 'COMMON'")
     @Enumerated(EnumType.STRING)
     private LocationType locationType;
 
