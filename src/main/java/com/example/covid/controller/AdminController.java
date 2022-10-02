@@ -21,7 +21,7 @@ import java.util.Map;
 public class AdminController {
 
     @GetMapping("/locations")
-    public ModelAndView adminPlaces(
+    public ModelAndView adminLocations(
             LocationType locationType, String locationName, String address
     ) {
         Map<String, Object> model = new HashMap<>();
@@ -33,9 +33,10 @@ public class AdminController {
     }
 
     @GetMapping("/locations/{locationId}")
-    public ModelAndView adminPlaceDetail(@PathVariable Integer locationId) {
+    public ModelAndView adminLocationDetail(@PathVariable Integer locationId) {
         Map<String, Object> map = new HashMap<>();
         map.put("location", LocationDto.of(
+                1L,
                 LocationType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
