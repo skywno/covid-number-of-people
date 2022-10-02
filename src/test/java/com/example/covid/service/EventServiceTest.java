@@ -90,7 +90,7 @@ class EventServiceTest {
         Long eventId = 1L;
         Event event = createEvent(1L, "오전 운동", true);
 
-        given(eventRepository.save(event))
+        given(eventRepository.save(any(Event.class)))
                 .willReturn(event);
 
         // When
@@ -98,7 +98,7 @@ class EventServiceTest {
 
         // Then
         assertThat(result).isTrue();
-        verify(eventRepository).save(event);
+        verify(eventRepository).save(any(Event.class));
     }
 
     @DisplayName("이벤트 정보를 주지 않으면, 생성 중단하고 결과를 false 로 보여준다.")
@@ -148,7 +148,7 @@ class EventServiceTest {
         // Then
         assertThat(result).isTrue();
         then(eventRepository).should().findById(eventId);
-        then(eventRepository).should().save(changedEvent);
+        then(eventRepository).should().save(any(Event.class));
     }
 
     @DisplayName("이벤트 ID를 주지 않으면, 이벤트 정보 변경 중단하고 결과를 false 로 보여준다.")
