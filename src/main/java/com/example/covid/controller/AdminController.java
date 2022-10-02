@@ -4,7 +4,7 @@ package com.example.covid.controller;
 import com.example.covid.constant.EventStatus;
 import com.example.covid.constant.LocationType;
 import com.example.covid.dto.EventDto;
-import com.example.covid.dto.LocationDTO;
+import com.example.covid.dto.LocationDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,13 +35,12 @@ public class AdminController {
     @GetMapping("/locations/{locationId}")
     public ModelAndView adminPlaceDetail(@PathVariable Integer locationId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("location", LocationDTO.of(
+        map.put("location", LocationDto.of(
                 LocationType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
                 "010-1234-5678",
                 30,
-                "신장개업",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         ));

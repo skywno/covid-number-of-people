@@ -68,7 +68,7 @@ public class EventService {
                 return false;
             }
 
-            eventRepository.findById(eventId).ifPresent(event -> dto.updateEntity(event));
+            eventRepository.findById(eventId).ifPresent(event -> eventRepository.save(dto.updateEntity(event)));
             return true;
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
