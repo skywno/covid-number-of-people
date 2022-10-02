@@ -56,7 +56,7 @@ class LocationControllerTest {
         /// Given
         Long locationId = 1L;
         given(locationService.getLocation(locationId))
-                .willReturn(Optional.of(LocationDto.of(
+                .willReturn(Optional.of(LocationDto.of(locationId,
                         null, null, null, null, null, null, null)));
         // When & Then
         mvc.perform(get("/locations/" + locationId))
