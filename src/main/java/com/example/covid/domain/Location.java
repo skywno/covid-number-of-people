@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Getter
@@ -92,5 +93,17 @@ public class Location {
     ) {
         return new Location(locationType, locationName, address, phoneNumber,
                 capacity);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        return id != null && id.equals(((Location) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(locationName, address, phoneNumber, createdAt, modifiedAt);
     }
 }

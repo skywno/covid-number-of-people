@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @ToString
@@ -63,4 +64,16 @@ public class AdminLocationMap {
     public static AdminLocationMap of(Long adminId, Long locationId) {
         return new AdminLocationMap(adminId, locationId);
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        return id != null && id.equals(((AdminLocationMap) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(locationId, adminId, createdAt, modifiedAt);
+    }
+
 }
