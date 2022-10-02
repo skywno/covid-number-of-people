@@ -37,15 +37,12 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> general(GeneralException e, WebRequest request) {
         ErrorCode errorCode = e.getErrorCode();
-        HttpStatus status = errorCode.isClientSideError() ?
-                HttpStatus.BAD_REQUEST :
-                HttpStatus.INTERNAL_SERVER_ERROR;
 
         return super.handleExceptionInternal(
                 e,
                 APIErrorResponse.of(false, errorCode, errorCode.getMessage(e)),
                 HttpHeaders.EMPTY,
-                status,
+                errorCode.getHttpStatus(),
                 request
         );
     }
