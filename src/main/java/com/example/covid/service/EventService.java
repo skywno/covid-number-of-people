@@ -3,12 +3,15 @@ package com.example.covid.service;
 
 import com.example.covid.constant.ErrorCode;
 import com.example.covid.constant.EventStatus;
+import com.example.covid.domain.Location;
 import com.example.covid.dto.EventDto;
 import com.example.covid.exception.GeneralException;
 import com.example.covid.repository.EventRepository;
+import com.example.covid.repository.LocationRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +24,9 @@ import java.util.stream.StreamSupport;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final LocationRepository locationRepository;
 
+    @Transactional(readOnly = true)
     public List<EventDto> getEvents(Predicate predicate) {
         try {
             return StreamSupport.stream(eventRepository.findAll(predicate).spliterator(), false)
@@ -52,9 +57,13 @@ public class EventService {
 
     public boolean createEvent(EventDto eventDto) {
         try {
-            if (eventDto == null) {return false;}
+            if (eventDto == null) {
+                return false;
+            }
 
-            eventRepository.save(eventDto.toEntity());
+            Location location = locationRepository.findById(eventDto.locationDto().id())
+                    .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+            eventRepository.save(eventDto.toEntity(location));
             return true;
 
         } catch (Exception e) {

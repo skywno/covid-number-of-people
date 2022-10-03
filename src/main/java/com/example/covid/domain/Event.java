@@ -15,7 +15,6 @@ import java.util.Objects;
 @ToString
 @EqualsAndHashCode
 @Table(indexes = {
-        @Index(columnList = "locationId"),
         @Index(columnList = "eventName"),
         @Index(columnList = "eventStartDateTime"),
         @Index(columnList = "eventEndDateTime"),
@@ -36,8 +35,8 @@ public class Event {
     private String eventName;
 
     @Setter
-    @Column(nullable = false)
-    private Long locationId;
+    @ManyToOne(optional = false)
+    private Location location;
 
     @Setter
     @Column(nullable = false,
@@ -80,11 +79,11 @@ public class Event {
     protected Event() {
     }
 
-    public Event(String eventName, Long locationId, EventStatus status,
+    public Event(String eventName, Location location, EventStatus status,
                  LocalDateTime eventStartDateTime, LocalDateTime eventEndDateTime,
                  Integer currentNumberOfPeople, Integer capacity) {
         this.eventName = eventName;
-        this.locationId = locationId;
+        this.location = location;
         this.eventStatus = status;
         this.eventStartDateTime = eventStartDateTime;
         this.eventEndDateTime = eventEndDateTime;
@@ -95,7 +94,7 @@ public class Event {
 
     public static Event of(
             String eventName,
-            Long locationId,
+            Location location,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime,
@@ -104,7 +103,7 @@ public class Event {
     ) {
         return new Event(
                 eventName,
-                locationId,
+                location,
                 eventStatus,
                 eventStartDatetime,
                 eventEndDatetime,

@@ -17,8 +17,6 @@ import java.util.Objects;
 @ToString
 @EqualsAndHashCode
 @Table(indexes = {
-        @Index(columnList = "adminId"),
-        @Index(columnList = "locationId"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "modifiedAt")
 })
@@ -33,12 +31,12 @@ public class AdminLocationMap {
 
 
     @Setter
-    @Column(nullable = false)
-    private Long adminId;
+    @ManyToOne(optional = false)
+    private Admin admin;
 
     @Setter
-    @Column(nullable = false)
-    private Long locationId;
+    @ManyToOne(optional = false)
+    private Location location;
 
 
     @Column(nullable = false, insertable = false, updatable = false,
@@ -56,13 +54,13 @@ public class AdminLocationMap {
     protected AdminLocationMap() {
     }
 
-    protected AdminLocationMap(Long adminId, Long locationId) {
-        this.adminId = adminId;
-        this.locationId = locationId;
+    protected AdminLocationMap(Admin admin, Location location) {
+        this.admin = admin;
+        this.location = location;
     }
 
-    public static AdminLocationMap of(Long adminId, Long locationId) {
-        return new AdminLocationMap(adminId, locationId);
+    public static AdminLocationMap of(Admin admin, Location location) {
+        return new AdminLocationMap(admin, location);
     }
     @Override
     public boolean equals(Object obj) {
@@ -73,7 +71,7 @@ public class AdminLocationMap {
 
     @Override
     public int hashCode() {
-        return Objects.hash(locationId, adminId, createdAt, modifiedAt);
+        return Objects.hash(location, admin, createdAt, modifiedAt);
     }
 
 }

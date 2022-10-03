@@ -11,7 +11,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Getter
@@ -65,6 +67,15 @@ public class Location {
                     "CURRENT_TIMESTAMP")
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    @ToString.Exclude
+    @OrderBy("id")
+    @OneToMany(mappedBy = "location")
+    private final Set<Event> events = new LinkedHashSet<>();
+    
+    @ToString.Exclude
+    @OneToMany(mappedBy = "location")
+    private final Set<AdminLocationMap> adminLocationMaps = new LinkedHashSet<>();
 
 
     protected Location() {
