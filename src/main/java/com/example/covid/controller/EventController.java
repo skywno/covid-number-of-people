@@ -3,6 +3,7 @@ package com.example.covid.controller;
 import com.example.covid.constant.EventStatus;
 import com.example.covid.domain.Event;
 import com.example.covid.dto.EventResponse;
+import com.example.covid.dto.LocationDto;
 import com.example.covid.service.EventService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,16 @@ public class EventController {
         // TODO: 임시 데이터. 추후 삭제 예정
         map.put("event", EventResponse.of(
                 eventId,
-                1L,
+                LocationDto.of(
+                        1L,
+                        PlaceType.SPORTS,
+                        "배드민턴장",
+                        "서울시 그리구 그래동",
+                        "010-2222-3333",
+                        33,
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                ),
                 "오후 운동",
                 EventStatus.OPENED,
                 LocalDateTime.of(2021, 1, 1, 13, 0, 0),

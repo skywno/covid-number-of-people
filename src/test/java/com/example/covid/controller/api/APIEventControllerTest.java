@@ -2,8 +2,10 @@ package com.example.covid.controller.api;
 
 import com.example.covid.constant.ErrorCode;
 import com.example.covid.constant.EventStatus;
+import com.example.covid.constant.LocationType;
 import com.example.covid.dto.EventDto;
 import com.example.covid.dto.EventRequest;
+import com.example.covid.dto.LocationDto;
 import com.example.covid.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
@@ -303,7 +305,7 @@ class APIEventControllerTest {
     private EventDto createEventDTO() {
         return EventDto.of(
                 1L,
-                1L,
+                createLocationDto(0L),
                 "오후 운동",
                 EventStatus.OPENED,
                 LocalDateTime.of(2021, 1, 1, 13, 0, 0),
@@ -313,6 +315,19 @@ class APIEventControllerTest {
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
+    }
+
+    private LocationDto createLocationDto(long locationId) {
+        return LocationDto.of(locationId,
+                LocationType.COMMON,
+                "배드민턴장",
+                "서울시 가나구 다라동",
+                "010-1111-2222",
+                10,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
     }
 
 }

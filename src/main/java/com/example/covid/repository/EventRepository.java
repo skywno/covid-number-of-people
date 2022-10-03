@@ -18,11 +18,12 @@ public interface EventRepository extends
     @Override
     default void customize(QuerydslBindings bindings, QEvent root) {
         bindings.excludeUnlistedProperties(true);
-        bindings.including(root.locationId, root.eventName, root.eventStatus,
+        bindings.including(root.location.locationName, root.eventName, root.eventStatus,
                 root.eventStartDateTime, root.eventEndDateTime);
         bindings.bind(root.eventName).first(StringExpression::contains);
         bindings.bind(root.eventStartDateTime).first(ComparableExpression::goe);
         bindings.bind(root.eventEndDateTime).first(ComparableExpression::loe);
+        bindings.bind(root.location.locationName).first(StringExpression::containsIgnoreCase);
     }
 
 
