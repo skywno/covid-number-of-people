@@ -40,20 +40,20 @@ public class Event {
 
     @Setter
     @Column(nullable = false,
-            columnDefinition = "varchar(20) DEFAULT \"OPENED\"")
+            columnDefinition = "varchar(20) DEFAULT 'OPENED'")
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus;
 
 
     @Setter
     @Column(nullable = false,
-            columnDefinition = "datetime")
+            columnDefinition = "timestamp")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime eventStartDateTime;
 
     @Setter
     @Column(nullable = false,
-            columnDefinition = "datetime")
+            columnDefinition = "timestamp")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime eventEndDateTime;
 
@@ -66,13 +66,12 @@ public class Event {
     private Integer capacity;
 
     @Column(nullable = false, insertable = false, updatable = false,
-            columnDefinition = "datetime default CURRENT_TIMESTAMP")
+            columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Column(nullable = false, insertable = false, updatable = false,
-            columnDefinition = "datetime default CURRENT_TIMESTAMP on update " +
-                    "CURRENT_TIMESTAMP")
+            columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
