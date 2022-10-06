@@ -37,7 +37,7 @@ public record EventRequest(
     public EventDto toDTO() {
         return EventDto.of(
                 null,
-                locationId,
+                null, //TODO: 여기를  반드시 적절하게 고쳐야 함
                 eventName,
                 eventStatus,
                 eventStartDateTime,

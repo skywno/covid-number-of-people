@@ -10,6 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @ToString
@@ -26,6 +29,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
     @Setter
     @Column(nullable = false, unique = true)
@@ -44,14 +48,18 @@ public class Admin {
     private String phoneNumber;
 
     @Column(nullable = false, insertable = false, updatable = false,
-            columnDefinition = "datetime default CURRENT_TIMESTAMP")
+            columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Column(nullable = false, insertable = false, updatable = false,
-            columnDefinition = "datetime default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
+            columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "admin")
+    private final Set<AdminLocationMap> adminLocationMaps = new LinkedHashSet<>();
 
     protected Admin() {}
 
@@ -65,5 +73,17 @@ public class Admin {
 
     public static Admin of(String email, String nickname, String password, String phoneNumber) {
         return new Admin(email, nickname, password, phoneNumber);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        return id != null && id.equals(((Admin) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, nickname, phoneNumber, createdAt, modifiedAt);
     }
 }

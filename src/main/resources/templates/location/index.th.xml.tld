@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<thlogic>
+    <attr sel="#locationsTitle" th:text="'장소 목록'" />
+    <attr sel="#locationsTable">
+        <attr sel="tbody">
+            <attr sel="tr[0]" th:each="location : ${locations}">
+                <attr sel="td.locationeName" th:text="${place.locationName}" />
+                <attr sel="td.phoneNumber" th:text="${location.phoneNumber}" />
+                <attr sel="td/a" th:text="'상세'" th:href="@{'/location/' + ${location.id}}" />
+            </attr>
+        </attr>
+    </attr>

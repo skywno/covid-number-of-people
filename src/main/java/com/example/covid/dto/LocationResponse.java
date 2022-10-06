@@ -18,5 +18,15 @@ public record LocationResponse(
     ) {
         return new LocationResponse(locationType, locationName, address, phoneNumber, capacity);
     }
+
+    public static LocationResponse from (LocationDto dto) {
+        return LocationResponse.of(
+                dto.locationType(),
+                dto.locationName(),
+                dto.address(),
+                dto.phoneNumber(),
+                dto.capacity()
+        );
+    }
 }
 

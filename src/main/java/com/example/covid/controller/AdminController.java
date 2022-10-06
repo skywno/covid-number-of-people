@@ -4,7 +4,7 @@ package com.example.covid.controller;
 import com.example.covid.constant.EventStatus;
 import com.example.covid.constant.LocationType;
 import com.example.covid.dto.EventDto;
-import com.example.covid.dto.LocationDTO;
+import com.example.covid.dto.LocationDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class AdminController {
 
     @GetMapping("/locations")
-    public ModelAndView adminPlaces(
+    public ModelAndView adminLocations(
             LocationType locationType, String locationName, String address
     ) {
         Map<String, Object> model = new HashMap<>();
@@ -33,15 +33,15 @@ public class AdminController {
     }
 
     @GetMapping("/locations/{locationId}")
-    public ModelAndView adminPlaceDetail(@PathVariable Integer locationId) {
+    public ModelAndView adminLocationDetail(@PathVariable Integer locationId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("location", LocationDTO.of(
+        map.put("location", LocationDto.of(
+                1L,
                 LocationType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
                 "010-1234-5678",
                 30,
-                "신장개업",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         ));
@@ -70,7 +70,16 @@ public class AdminController {
         Map<String, Object> map = new HashMap<>();
         map.put("event", EventDto.of(
                 eventId,
-                1L,
+                LocationDto.of(
+                        1L,
+                        LocationType.SPORTS,
+                        "배드민턴장",
+                        "서울시 그리구 그래동",
+                        "010-2222-3333",
+                        33,
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                ),
                 "오후 운동",
                 EventStatus.OPENED,
                 LocalDateTime.of(2021,1,1,13,0,0),

@@ -11,13 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @ToString
 @EqualsAndHashCode
 @Table(indexes = {
-        @Index(columnList = "adminId"),
-        @Index(columnList = "locationId"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "modifiedAt")
 })
@@ -32,22 +31,21 @@ public class AdminLocationMap {
 
 
     @Setter
-    @Column(nullable = false)
-    private Long adminId;
+    @ManyToOne(optional = false)
+    private Admin admin;
 
     @Setter
-    @Column(nullable = false)
-    private Long locationId;
+    @ManyToOne(optional = false)
+    private Location location;
 
 
     @Column(nullable = false, insertable = false, updatable = false,
-            columnDefinition = "datetime default CURRENT_TIMESTAMP")
+            columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Column(nullable = false, insertable = false, updatable = false,
-            columnDefinition = "datetime default CURRENT_TIMESTAMP on update " +
-                    "CURRENT_TIMESTAMP")
+            columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
@@ -55,12 +53,24 @@ public class AdminLocationMap {
     protected AdminLocationMap() {
     }
 
-    protected AdminLocationMap(Long adminId, Long locationId) {
-        this.adminId = adminId;
-        this.locationId = locationId;
+    protected AdminLocationMap(Admin admin, Location location) {
+        this.admin = admin;
+        this.location = location;
     }
 
-    public static AdminLocationMap of(Long adminId, Long locationId) {
-        return new AdminLocationMap(adminId, locationId);
+    public static AdminLocationMap of(Admin admin, Location location) {
+        return new AdminLocationMap(admin, location);
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        return id != null && id.equals(((AdminLocationMap) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(location, admin, createdAt, modifiedAt);
+    }
+
 }

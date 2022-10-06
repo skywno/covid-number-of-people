@@ -2,12 +2,13 @@ package com.example.covid.dto;
 
 import com.example.covid.constant.EventStatus;
 import com.example.covid.domain.Event;
+import com.example.covid.domain.Location;
 
 import java.time.LocalDateTime;
 
 public record EventDto(
         Long id,
-        Long locationId,
+        LocationDto locationDto,
         String eventName,
         EventStatus eventStatus,
         LocalDateTime eventStartDateTime,
@@ -18,15 +19,15 @@ public record EventDto(
         LocalDateTime modifiedAt
 ) {
 
-    public static EventDto of (
-            Long id, Long locationId, String eventName, EventStatus eventStatus,
+    public static EventDto of(
+            Long id, LocationDto locationDto, String eventName, EventStatus eventStatus,
             LocalDateTime eventStartDateTime, LocalDateTime eventEndDateTime,
             Integer currentNumberOfPeople, Integer capacity,
             LocalDateTime createdAt, LocalDateTime modifiedAt
     ) {
         return new EventDto(
                 id,
-                locationId,
+                locationDto,
                 eventName,
                 eventStatus,
                 eventStartDateTime,
@@ -41,7 +42,7 @@ public record EventDto(
     public static EventDto of(Event event) {
         return new EventDto(
                 event.getId(),
-                event.getLocationId(),
+                LocationDto.of(event.getLocation()),
                 event.getEventName(),
                 event.getEventStatus(),
                 event.getEventStartDateTime(),
@@ -53,10 +54,10 @@ public record EventDto(
         );
     }
 
-    public Event toEntity() {
+    public Event toEntity(Location location) {
         return Event.of(
                 eventName,
-                locationId,
+                location,
                 eventStatus,
                 eventStartDateTime,
                 eventEndDateTime,
@@ -66,13 +67,24 @@ public record EventDto(
     }
 
     public Event updateEntity(Event event) {
-        if (locationId != null) { event.setLocationId(locationId); }
-        if (eventName != null) { event.setEventName(eventName); }
-        if (eventStatus != null) { event.setEventStatus(eventStatus); }
-        if (eventStartDateTime != null) { event.setEventStartDateTime(eventStartDateTime); }
-        if (eventEndDateTime != null) { event.setEventEndDateTime(eventEndDateTime); }
-        if (currentNumberOfPeople != null) { event.setCurrentNumberOfPeople(currentNumberOfPeople); }
-        if (capacity != null) { event.setCapacity(capacity); }
+        if (eventName != null) {
+            event.setEventName(eventName);
+        }
+        if (eventStatus != null) {
+            event.setEventStatus(eventStatus);
+        }
+        if (eventStartDateTime != null) {
+            event.setEventStartDateTime(eventStartDateTime);
+        }
+        if (eventEndDateTime != null) {
+            event.setEventEndDateTime(eventEndDateTime);
+        }
+        if (currentNumberOfPeople != null) {
+            event.setCurrentNumberOfPeople(currentNumberOfPeople);
+        }
+        if (capacity != null) {
+            event.setCapacity(capacity);
+        }
 
         return event;
     }

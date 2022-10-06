@@ -9,12 +9,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @ToString
 @EqualsAndHashCode
 @Table(indexes = {
-        @Index(columnList = "locationId"),
         @Index(columnList = "eventName"),
         @Index(columnList = "eventStartDateTime"),
         @Index(columnList = "eventEndDateTime"),
@@ -35,25 +35,25 @@ public class Event {
     private String eventName;
 
     @Setter
-    @Column(nullable = false)
-    private Long locationId;
+    @ManyToOne(optional = false)
+    private Location location;
 
     @Setter
     @Column(nullable = false,
-            columnDefinition = "varchar DEFAULT 'OPENED'")
+            columnDefinition = "varchar(20) DEFAULT 'OPENED'")
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus;
 
 
     @Setter
     @Column(nullable = false,
-            columnDefinition = "datetime")
+            columnDefinition = "timestamp")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime eventStartDateTime;
 
     @Setter
     @Column(nullable = false,
-            columnDefinition = "datetime")
+            columnDefinition = "timestamp")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime eventEndDateTime;
 
@@ -66,24 +66,23 @@ public class Event {
     private Integer capacity;
 
     @Column(nullable = false, insertable = false, updatable = false,
-            columnDefinition = "datetime default CURRENT_TIMESTAMP")
+            columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Column(nullable = false, insertable = false, updatable = false,
-            columnDefinition = "datetime default CURRENT_TIMESTAMP on update " +
-                    "CURRENT_TIMESTAMP")
+            columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
     protected Event() {
     }
 
-    public Event(String eventName, Long locationId, EventStatus status,
+    public Event(String eventName, Location location, EventStatus status,
                  LocalDateTime eventStartDateTime, LocalDateTime eventEndDateTime,
                  Integer currentNumberOfPeople, Integer capacity) {
         this.eventName = eventName;
-        this.locationId = locationId;
+        this.location = location;
         this.eventStatus = status;
         this.eventStartDateTime = eventStartDateTime;
         this.eventEndDateTime = eventEndDateTime;
@@ -94,7 +93,7 @@ public class Event {
 
     public static Event of(
             String eventName,
-            Long locationId,
+            Location location,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime,
@@ -103,12 +102,24 @@ public class Event {
     ) {
         return new Event(
                 eventName,
-                locationId,
+                location,
                 eventStatus,
                 eventStartDatetime,
                 eventEndDatetime,
                 currentNumberOfPeople,
                 capacity
         );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        return id != null && id.equals(((Event) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventName, eventStartDateTime, eventEndDateTime, createdAt, modifiedAt);
     }
 }
