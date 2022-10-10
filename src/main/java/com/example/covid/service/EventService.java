@@ -41,7 +41,7 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public List<EventDto> getEvents(
-            Long locationId,
+            String locationName,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDateTime,

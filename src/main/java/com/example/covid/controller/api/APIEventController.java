@@ -30,13 +30,13 @@ public class APIEventController {
     private final EventService eventService;
     @GetMapping
     public APIDataResponse<List<EventResponse>> getEvents(
-            @Positive Long locationId,
+            @NotBlank String locationName,
             @Size(min = 2) @NotBlank String eventName,
             EventStatus eventStatus,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime
     ) {
-        List<EventDto> response = eventService.getEvents(locationId, eventName,
+        List<EventDto> response = eventService.getEvents(locationName, eventName,
                 eventStatus, eventStartDateTime, eventEndDateTime);
 
         return APIDataResponse.of(
