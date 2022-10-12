@@ -6,6 +6,7 @@ import com.example.covid.constant.LocationType;
 import com.example.covid.domain.Event;
 import com.example.covid.domain.Location;
 import com.example.covid.dto.EventDto;
+import com.example.covid.dto.EventViewResponse;
 import com.example.covid.exception.GeneralException;
 import com.example.covid.repository.EventRepository;
 import com.example.covid.repository.LocationRepository;
@@ -17,6 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
@@ -55,6 +59,41 @@ class EventServiceTest {
         // Then
         assertThat(list).hasSize(2);
         then(eventRepository).should().findAll(any(Predicate.class));
+    }
+
+    @DisplayName("이벤트 뷰 페이지를 검색하면, 페이징된 결과를 출력하여 보여준다")
+    @Test
+    void givenNothing_whenSearchingEventViewPage_returnsEventViewPage() {
+        // Given
+        given(eventRepository.findEventViewPageBySearchParams(
+                null,
+                null,
+                null,
+                null
+                , null,
+                PageRequest.ofSize(10)))
+                .willReturn(new PageImpl<>(List.of(
+                        EventViewResponse.from(EventDto.of(createEvent("오전 운동", true))),
+                        EventViewResponse.from(EventDto.of(createEvent("오후 운동",
+                                false))))
+                ));
+        // When
+        Page<EventViewResponse> list = sut.getEventViewResponse(null,
+                null,
+                null,
+                null,
+                null,
+                PageRequest.ofSize(10));
+        // Then
+
+        assertThat(list).hasSize(2);
+        then(eventRepository).should().findEventViewPageBySearchParams(
+                null,
+                null,
+                null,
+                null,
+                null,
+                PageRequest.ofSize(10));
     }
 
     @DisplayName("이벤트 ID가 존재하는 이벤트를 조회하면, 해당 이벤트 정보를 출력한다.")
@@ -275,7 +314,8 @@ class EventServiceTest {
     }
 
     private Event createEvent(String eventName, boolean isMorning) {
-        Location location = Location.of(LocationType.COMMON, "테스트 이름", "테스트 주소", "테스트 폰넘버", 30);
+        Location location = Location.of(LocationType.COMMON, "테스트 이름", "테스트 주소", "테스트" +
+                " 폰넘버", 30);
         String hourStart = isMorning ? "09" : "13";
         String hourEnd = isMorning ? "12" : "16";
 
