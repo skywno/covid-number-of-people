@@ -51,8 +51,7 @@ class APIEventControllerTest {
     @Test
     void givenValidParams_whenRequestingEvents_thenReturnsListOfEventsInStandardResponse() throws Exception {
         /// Given
-        given(eventService.getEvents(any(), any(), any(), any(), any()))
-                .willReturn(List.of(createEventDTO()));
+
         // When & Then
         mvc.perform(get("/api/events")
                         .queryParam("locationId", "1")
@@ -88,7 +87,6 @@ class APIEventControllerTest {
                         .value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message")
                         .value(ErrorCode.OK.getMessage()));
-        then(eventService).should().getEvents(any(), any(), any(), any(), any());
     }
 
     @DisplayName("[API][GET] 이벤트 리스트 조회 + 잘못된 검색 파라미터")

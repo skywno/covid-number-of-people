@@ -2,10 +2,8 @@ package com.example.covid.controller.api;
 
 
 import com.example.covid.constant.EventStatus;
-import com.example.covid.dto.APIDataResponse;
-import com.example.covid.dto.EventDto;
-import com.example.covid.dto.EventRequest;
-import com.example.covid.dto.EventResponse;
+import com.example.covid.constant.LocationType;
+import com.example.covid.dto.*;
 import com.example.covid.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,14 +34,26 @@ public class APIEventController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime
     ) {
-        List<EventDto> response = eventService.getEvents(locationName, eventName,
-                eventStatus, eventStartDateTime, eventEndDateTime);
-
-        return APIDataResponse.of(
-                response.stream()
-                        .map(EventResponse::from)
-                        .toList()
-        );
+        // TODO: 임시 데이터. 추후 삭제 예정
+        return APIDataResponse.of(List.of(EventResponse.of(
+                1L,
+                LocationDto.of(
+                        1L,
+                        LocationType.SPORTS,
+                        "배드민턴장",
+                        "서울시 가나구 다라동",
+                        "010-1111-2222",
+                        0,
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                ),
+                "오후 운동",
+                EventStatus.OPENED,
+                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
+                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
+                0,
+                24
+        )));
     }
 
     @ResponseStatus(HttpStatus.CREATED)

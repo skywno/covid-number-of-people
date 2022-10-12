@@ -49,4 +49,9 @@ public record EventResponse(
                 eventDto.capacity()
         );
     }
+
+
+    public String getLocationName() {
+        return this.location().locationName();
+    }
 }
