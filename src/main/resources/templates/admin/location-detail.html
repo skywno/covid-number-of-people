@@ -2,14 +2,41 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>관리자 장소</title>
 </head>
 <body>
 <p>
-  This is admin location detail page.
-</p>
-<p>
-  <span th:text="${location} ?: _">?</span>
-</p>
+        <span id="locationTitle">This is admin location detail page.</span>
+        </p>
+        <form id="locationForm">
+          <table id="locationTable">
+            <tbody>
+            <tr>
+              <td><label for="LocationType">장소 유형</label></td>
+      <td>
+        <select id="locationType" name="locationType">
+          <option>스포츠</option>
+          <option>레스토랑</option>
+          <option>일반</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><label for ="locationName">장소 이름</label></td>
+      <td><input type="text" id="locationName" name="locationName" required></td>
+    </tr>
+    <tr>
+      <<td><label for="phoneNumber">전화 번호</label></td>
+      <td><input type="tel" id="phoneNumber" name="phoneNumber" required></td>
+    </tr>
+    <tr>
+      <td><label for="capacity">수용 인원</label></td>
+      <td><input type="number" id="capacity" name="capacity" required></td>
+    </tr>
+    </tbody>
+  </table>
+</form>
+<button id="saveLocation" type="submit">저장</button>
+<button id="backToLocation" type="button">취소</button>
 </body>
 </html>

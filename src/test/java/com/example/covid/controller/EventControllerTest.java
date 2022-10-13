@@ -1,6 +1,7 @@
 package com.example.covid.controller;
 
 import com.example.covid.constant.EventStatus;
+import com.example.covid.dto.EventDto;
 import com.example.covid.service.EventService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -150,6 +152,9 @@ class EventControllerTest {
     void givenNothing_whenRequestingEventDetailPage_thenReturnsEventDetailPage() throws Exception {
         /// Given
         Long eventId = 1L;
+        given(eventService.getEvent(eventId)).willReturn(Optional.of(EventDto.of(
+                1L, null, null, null, null, null, null, null, null, null)
+        ));
         // When
         mvc.perform(get("/events/"+eventId))
                 .andExpect(status().isOk())

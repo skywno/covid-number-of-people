@@ -1,15 +1,54 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>관리자 이벤트</title>
 </head>
 <body>
 <p>
-  This is admin event detail page.
+  <span id="eventTitle">This is admin event page.</span>
 </p>
-<p>
-  <span th:text="${event} ?: _">?</span>
-</p>
+<form id="eventForm">
+  <table id="eventTable">
+    <tbody>
+    <tr>
+      <td><label for="locationName">장소 이름</label></td>
+      <td><input type="text" id="locationName" name="locationName" readonly></td>
+    </tr>
+    <tr>
+      <td><label for="eventName">이벤트 이름</label></td>
+      <td><input type="text" id="eventName" name="eventName" required></td>
+    </tr>
+    <tr>
+      <td><label for="eventStatus">이벤트 상태</label></td>
+      <td>
+        <select id="eventStatus" name="eventStatus" required>
+          <option>열림</option>
+          <option>종료</option>
+          <option>취소</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><label for="eventStartDateTime">시작 일시</label></td>
+      <td><input type="datetime-local" id="eventStartDateTime" name="eventStartDateTime" required></td>
+    </tr>
+    <tr>
+      <td><label for="eventEndDateTime">종료 일시</label></td>
+      <td><input type="datetime-local" id="eventEndDateTime" name="eventEndDateTime" required></td>
+    </tr>
+    <tr>
+      <td><label for="currentNumberOfPeople">현재 인원</label></td>
+      <td><input type="number" id="currentNumberOfPeople" name="currentNumberOfPeople" min="0" required></td>
+    </tr>
+    <tr>
+      <td><label for="capacity">최대 수용 인원</label></td>
+      <td><input type="number" id="capacity" name="capacity" min="0" required></td>
+    </tr>
+    </tbody>
+  </table>
+</form>
+<button id="saveEvent" type="submit">저장</button>
+<button id="backToEvents" type="button">취소</button>
 </body>
 </html>
