@@ -9,6 +9,7 @@ import com.example.covid.repository.LocationRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
 
+    @Transactional(readOnly = true)
     public List<LocationDto> getLocations(Predicate predicate) {
         try {
             return StreamSupport
@@ -34,6 +36,7 @@ public class LocationService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Optional<LocationDto> getLocation(Long locationId) {
         try {
             return locationRepository.findById(locationId)
@@ -43,6 +46,7 @@ public class LocationService {
         }
     }
 
+    @Transactional
     public boolean createLocation(LocationDto locationDto) {
         try {
             if (locationDto == null) {return false;}
@@ -54,6 +58,7 @@ public class LocationService {
         }
     }
 
+    @Transactional
     public boolean modifyLocation(Long locationId, LocationDto dto) {
         try {
             if (locationId == null || dto == null) {
@@ -69,6 +74,8 @@ public class LocationService {
         }
     }
 
+
+    @Transactional
     public boolean removeLocation(Long locationId) {
         try {
             if (locationId == null) return false;
