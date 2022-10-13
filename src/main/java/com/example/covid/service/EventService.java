@@ -82,11 +82,10 @@ public class EventService {
                 return false;
             }
 
-            Location location = locationRepository.findById(eventDto.locationDto().id())
-                    .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+            Location location = locationRepository.getById(eventDto.locationDto().id());
             eventRepository.save(eventDto.toEntity(location));
             return true;
-
+            
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }

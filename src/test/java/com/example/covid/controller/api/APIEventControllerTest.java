@@ -176,7 +176,7 @@ class APIEventControllerTest {
             throws Exception {
         // Given
         long eventId = 1L;
-        given(eventService.getEvent(eventId)).willReturn(Optional.of(createEventDTO()));
+        given(eventService.getEvent(eventId)).willReturn(Optional.of(createEventDto()));
 
         // When & Then
         mvc.perform(get("/api/events/" + eventId))
@@ -223,7 +223,7 @@ class APIEventControllerTest {
     void givenEvent_whenModifyingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
         long eventId = 1L;
-        EventDto dto = createEventDTO();
+        EventDto dto = createEventDto();
         EventRequest eventRequest = EventRequest.of(
                 1L,
                 "오후 운동",
@@ -256,7 +256,7 @@ class APIEventControllerTest {
     void givenWrongEvent_whenModifyingAnEvent_thenReturnsFailedStandardResponse() throws Exception {
         // Given
         long eventId = 1L;
-        EventDto dto = createEventDTO();
+        EventDto dto = createEventDto();
         EventRequest eventRequest = EventRequest.of(
                 1L,
                 null,
@@ -300,7 +300,7 @@ class APIEventControllerTest {
 
     }
 
-    private EventDto createEventDTO() {
+    private EventDto createEventDto() {
         return EventDto.of(
                 1L,
                 createLocationDto(0L),

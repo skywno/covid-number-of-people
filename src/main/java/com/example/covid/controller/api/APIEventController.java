@@ -61,7 +61,7 @@ public class APIEventController {
     public APIDataResponse<String> createEvent(
             @Valid @RequestBody EventRequest eventRequest
     ) {
-        Boolean result = eventService.createEvent(eventRequest.toDTO());
+        Boolean result = eventService.createEvent(eventRequest.toDto());
         return APIDataResponse.of(result.toString());
     }
 
@@ -81,7 +81,7 @@ public class APIEventController {
             @Positive @PathVariable Long eventId,
             @Valid @RequestBody EventRequest eventRequest
     ) {
-        Boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
+        Boolean result = eventService.modifyEvent(eventId, eventRequest.toDto());
         return APIDataResponse.of(result.toString());
     }
 

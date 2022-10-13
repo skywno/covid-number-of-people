@@ -187,7 +187,6 @@ class EventServiceTest {
         given(locationRepository.findById(any())).willThrow(e);
 
         // When
-        ProcessHandle EventDTO;
         Throwable thrown = catchThrowable(() -> sut.createEvent(EventDto.of(event)));
 
         // Then

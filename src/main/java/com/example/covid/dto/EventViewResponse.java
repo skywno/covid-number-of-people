@@ -48,17 +48,17 @@ public record EventViewResponse(
                 eventStartDateTime, eventEndDateTime, currentNumberOfPeople, capacity);
     }
 
-    public static EventViewResponse from(EventDto eventDTO) {
-        if (eventDTO == null) { return null; }
+    public static EventViewResponse from(EventDto eventDto) {
+        if (eventDto == null) { return null; }
         return EventViewResponse.of(
-                eventDTO.id(),
-                eventDTO.locationDto().locationName(),
-                eventDTO.eventName(),
-                eventDTO.eventStatus(),
-                eventDTO.eventStartDateTime(),
-                eventDTO.eventEndDateTime(),
-                eventDTO.currentNumberOfPeople(),
-                eventDTO.capacity()
+                eventDto.id(),
+                eventDto.locationDto().locationName(),
+                eventDto.eventName(),
+                eventDto.eventStatus(),
+                eventDto.eventStartDateTime(),
+                eventDto.eventEndDateTime(),
+                eventDto.currentNumberOfPeople(),
+                eventDto.capacity()
         );
     }
 }

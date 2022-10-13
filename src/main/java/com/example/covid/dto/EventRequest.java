@@ -34,7 +34,7 @@ public record EventRequest(
         );
     }
 
-    public EventDto toDTO() {
+    public EventDto toDto() {
         return EventDto.of(
                 null,
                 null, //TODO: 여기를  반드시 적절하게 고쳐야 함
