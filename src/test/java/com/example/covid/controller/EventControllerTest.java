@@ -141,7 +141,7 @@ class EventControllerTest {
                                 .queryParam("page", "1")
                                 .queryParam("size", "3")
                 )
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("error"))
                 .andExpect(model().attributeDoesNotExist("events"));
