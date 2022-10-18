@@ -73,7 +73,7 @@ public class Location {
     private final Set<Event> events = new LinkedHashSet<>();
     
     @ToString.Exclude
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location", cascade=CascadeType.REMOVE)
     private final Set<AdminLocationMap> adminLocationMaps = new LinkedHashSet<>();
 
 

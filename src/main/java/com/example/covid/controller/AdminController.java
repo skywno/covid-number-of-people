@@ -112,13 +112,14 @@ public class AdminController {
             @PathVariable Long locationId,
             RedirectAttributes redirectAttributes
     ) {
-        AdminOperationStatus status = eventRequest.id() != null ? AdminOperationStatus.UPDATE : AdminOperationStatus.CREATE;
+        AdminOperationStatus status = eventRequest.id() != null ?
+                AdminOperationStatus.UPDATE : AdminOperationStatus.CREATE;
         eventService.upsertEvent(eventRequest.toDto(LocationDto.idOnly(locationId)));
 
         redirectAttributes.addFlashAttribute("adminOperationStatus",
                 status);
         redirectAttributes.addFlashAttribute("redirectUrl",
-                "/admin/locations/" + locationId);
+                "/admin/events");
 
         return "redirect:/admin/confirm";
     }
@@ -161,4 +162,33 @@ public class AdminController {
         return "admin/confirm";
     }
 
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @GetMapping("/events/{eventId}/delete")
+    public String deleteEvent(
+            @PathVariable Long eventId,
+            RedirectAttributes redirectAttributes
+    ) {
+        eventService.removeEvent(eventId);
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus",
+                AdminOperationStatus.DELETE);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/events");
+
+        return "redirect:/admin/confirm";
+    }
+
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @GetMapping("/locations/{locationId}/delete")
+    public String deleteLocation(
+            @PathVariable Long locationId,
+            RedirectAttributes redirectAttributes
+    ) {
+        locationService.removeLocation(locationId);
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus",
+                AdminOperationStatus.DELETE);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/locations");
+
+        return "redirect:/admin/confirm";
+    }
 }
