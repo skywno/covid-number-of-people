@@ -17,6 +17,20 @@
     <attr sel="#deleteLocation" th:if="${location?.id} != null"
           th:onclick="'location.href=\'' + @{/admin/locations/{locationId}/delete(locationId=${location?.id})} + '\''"/>
     <attr sel="#backToLocations" th:onclick="'location.href=\'' + @{/admin/locations} + '\''"/>
-    <attr sel="#newEvent" th:if="${location} != null"
-          th:onclick="'location.href=\'' + @{/admin/locations/{locationId}/newEvent(locationId=${location?.id})} + '\''"/>
-</thlogic>
+
+    <attr sel="#eventTable">
+        <attr sel="tbody" th:remove="all-but-first">
+            <attr sel="tr[0]" th:each="event : ${events}">
+                <attr sel="td.eventName" th:text="${event.eventName}"/>
+                <attr sel="td.eventStatus" th:text="${event.eventStatus}"/>
+                <attr sel="td.eventDateTime"
+                      th:text="${#temporals.format(event.eventStartDateTime, 'M/d ha', 'US')} + ' ~ ' + ${#temporals.format(event.eventEndDateTime, 'M/d ha', 'US')}"/>
+                <attr sel="td.people" th:text="${event.capacity} + '명'"/>
+                <attr sel="td/a" th:text="'상세'" th:href="@{'/admin/events/' + ${event.id}}"/>
+            </attr>
+        </attr>
+    </attr>
+</attr>
+<attr sel="#newEvent" th:if="${location} != null"
+      th:onclick="'location.href=\'' + @{/admin/locations/{locationId}/newEvent(locationId=${location?.id})} + '\''"/>
+        </thlogic>

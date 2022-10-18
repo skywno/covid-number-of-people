@@ -3,6 +3,7 @@ package com.example.covid.service;
 
 import com.example.covid.constant.ErrorCode;
 import com.example.covid.constant.EventStatus;
+import com.example.covid.domain.Event;
 import com.example.covid.domain.Location;
 import com.example.covid.dto.EventDto;
 import com.example.covid.dto.EventViewResponse;
@@ -14,6 +15,7 @@ import com.example.covid.repository.LocationRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -72,6 +74,24 @@ public class EventService {
     public Optional<EventDto> getEvent(Long eventId) {
         try {
             return eventRepository.findById(eventId).map(EventDto::of);
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
+
+    public Page<EventViewResponse> getEvent(Long locationId, Pageable pageable) {
+        try {
+            Location location = locationRepository.getById(locationId);
+            Page<Event> eventPage = eventRepository.findByLocation(location, pageable);
+
+            return new PageImpl<>(
+                    eventPage.getContent()
+                            .stream()
+                            .map(event -> EventViewResponse.from(EventDto.of(event)))
+                            .toList(),
+                    eventPage.getPageable(),
+                    eventPage.getTotalElements()
+            );
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }

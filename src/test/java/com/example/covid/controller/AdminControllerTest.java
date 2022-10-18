@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -89,6 +92,9 @@ class AdminControllerTest {
                                 null, null,
                                 null, null)
                 ));
+        given(eventService.getEvent(eq(placeId), any(PageRequest.class)))
+                .willReturn(Page.empty());
+
         // When & Then
         mvc.perform(get("/admin/locations/" + placeId))
                 .andExpect(status().isOk())
@@ -96,12 +102,14 @@ class AdminControllerTest {
                 .andExpect(view().name("admin/location-detail"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attributeExists("location"))
+                .andExpect(model().attributeExists("events"))
                 .andExpect(model().attribute("adminOperationStatus",
                         AdminOperationStatus.UPDATE))
                 .andExpect(model().attribute("locationTypeOption",
                         LocationType.values()));
 
         then(locationService).should().getLocation(placeId);
+        then(eventService).should().getEvent(eq(placeId), any(PageRequest.class));
 
     }
 

@@ -13,7 +13,10 @@ import com.example.covid.service.EventService;
 import com.example.covid.service.LocationService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,16 +56,21 @@ public class AdminController {
     }
 
     @GetMapping("/locations/{locationId}")
-    public ModelAndView adminLocationDetail(@PathVariable Long locationId) {
+    public ModelAndView adminLocationDetail(
+            @PathVariable Long locationId,
+            @PageableDefault Pageable pageable
+        ) {
 
         LocationResponse location = locationService.getLocation(locationId)
                 .map(LocationResponse::from)
                 .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
 
+        Page<EventViewResponse> events = eventService.getEvent(locationId, pageable);
 
         return new ModelAndView("admin/location-detail", Map.of(
                 "adminOperationStatus", AdminOperationStatus.UPDATE,
                 "location", location,
+                "events", events,
                 "locationTypeOption", LocationType.values()
         ));
     }
