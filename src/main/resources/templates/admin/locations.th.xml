@@ -11,4 +11,5 @@
         </attr>
     </attr>
 </attr>
+<attr sel="#newLocation" th:onclick="'window.location.href=\'' + @{/admin/locations/new} + '\''" />
 </thlogic>

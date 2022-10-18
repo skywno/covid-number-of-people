@@ -6,15 +6,15 @@
 </head>
 <body>
 <p>
-        <span id="locationTitle">This is admin location detail page.</span>
-        </p>
-        <form id="locationForm">
-          <table id="locationTable">
-            <tbody>
-            <tr>
-              <td><label for="LocationType">장소 유형</label></td>
+  <span id="locationTitle">This is admin location detail page.</span>
+</p>
+<form id="locationForm">
+  <table id="locationTable">
+    <tbody>
+    <tr>
+      <td><label for="locationType">장소 유형</label></td>
       <td>
-        <select id="locationType" name="locationType">
+        <select id="locationType" name="locationType" required>
           <option>스포츠</option>
           <option>레스토랑</option>
           <option>일반</option>
@@ -22,11 +22,15 @@
       </td>
     </tr>
     <tr>
-      <td><label for ="locationName">장소 이름</label></td>
+      <td><label for="locationName">장소 이름</label></td>
       <td><input type="text" id="locationName" name="locationName" required></td>
     </tr>
     <tr>
-      <<td><label for="phoneNumber">전화 번호</label></td>
+      <td><label for="address">주소</label></td>
+      <td><input type="text" id="address" name="address" required></td>
+    </tr>
+    <tr>
+      <td><label for="phoneNumber">전화 번호</label></td>
       <td><input type="tel" id="phoneNumber" name="phoneNumber" required></td>
     </tr>
     <tr>
@@ -38,5 +42,10 @@
 </form>
 <button id="saveLocation" type="submit">저장</button>
 <button id="backToLocation" type="button">취소</button>
+
+<hr>
+<!-- TODO: 여기에 장소와 연관된 이벤트들이 리스트로 보이면 좋을 듯 -->
+<button id="newEvent" type="button">새 이벤트</button>
+
 </body>
 </html>

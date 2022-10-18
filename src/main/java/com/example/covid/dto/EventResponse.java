@@ -50,6 +50,9 @@ public record EventResponse(
         );
     }
 
+    public static EventResponse empty(LocationDto locationDto) {
+        return EventResponse.of(null, locationDto, null, null, null, null, null, null);
+    }
 
     public String getLocationName() {
         return this.location().locationName();

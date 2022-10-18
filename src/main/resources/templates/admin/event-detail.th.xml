@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <thlogic>
-    <attr sel="#eventTitle" th:text="'이벤트 상세 - 관리자'" />
-    <attr sel="#eventTable" th:object="${event}">
-        <attr sel="#locationName" th:value="*{locationName}" />
-        <attr sel="#eventName" th:value="*{eventName}" />
+    <attr sel="#eventTitle" th:text="'이벤트 상세 - 관리자(' + ${adminOperationStatus.message} + ')'" />
+    <attr sel="#eventTable">
+        <attr sel="#locationName" th:value="*{event?.locationName}" />
+        <attr sel="#eventName" th:value="*{event?.eventName}" />
         <attr sel="#eventStatus" th:remove="all-but-first">
-            <attr sel="option" th:each="status : ${eventStatus}" th:value="${status}" th:text="${status}" />
+            <attr sel="option" th:each="status : ${eventStatusOption}" th:value="${status}" th:text="${status}" />
         </attr>
-        <attr sel="#eventStartDateTime" th:value="*{eventStartDateTime}" />
-        <attr sel="#eventEndDateTime" th:value="*{eventEndDateTime}" />
-        <attr sel="#currentNumberOfPeople" th:value="*{currentNumberOfPeople}" />
-        <attr sel="#capacity" th:value="*{capacity}" />
+        <attr sel="#eventStartDateTime" th:value="*{event?.eventStartDateTime}" />
+        <attr sel="#eventEndDateTime" th:value="*{event?.eventEndDateTime}" />
+        <attr sel="#currentNumberOfPeople" th:value="*{event?.currentNumberOfPeople}" />
+        <attr sel="#capacity" th:value="*{event?.capacity}" />
     </attr>
-    <attr sel="#saveEvent" th:form="eventForm" th:formaction="@{/admin/events}" th:formmethod="post" />
+    <attr sel="#saveEvent" th:form="eventForm" th:formaction="@{/admin/locations/{locationId}/events(locationId=${event?.location.id})}" th:formmethod="post" />
     <attr sel="#backToEvents" th:onclick="'location.href=\'' + @{/admin/events} + '\''" />
 </thlogic>

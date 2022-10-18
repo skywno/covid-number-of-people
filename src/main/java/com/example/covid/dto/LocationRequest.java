@@ -18,4 +18,17 @@ public record LocationRequest(
     ) {
         return new LocationRequest(locationType, locationName, address, phoneNumber, capacity);
     }
+
+    public LocationDto toDto() {
+        return LocationDto.of(
+                null,
+                this.locationType(),
+                this.locationName(),
+                this.address(),
+                this.phoneNumber(),
+                this.capacity(),
+                null,
+                null
+        );
+    }
 }

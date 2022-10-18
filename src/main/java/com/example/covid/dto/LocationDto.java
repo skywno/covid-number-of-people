@@ -42,6 +42,10 @@ public record LocationDto(
         );
     }
 
+    public static LocationDto idOnly(Long id) {
+        return LocationDto.of(id, null, null, null, null, null, null, null);
+    }
+
     public Location toEntity() {
         return Location.of(locationType, locationName, address, phoneNumber, capacity);
     }
