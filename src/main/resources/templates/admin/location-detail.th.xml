@@ -14,7 +14,7 @@
     </attr>
     <attr sel="#locationId" th:value="${location?.id}"/>
     <attr sel="#saveLocation" th:form="locationForm" th:formaction="@{/admin/locations}" th:formmethod="post"/>
-    <attr sel="#deleteLocation"
+    <attr sel="#deleteLocation" th:if="${location?.id} != null"
           th:onclick="'location.href=\'' + @{/admin/locations/{locationId}/delete(locationId=${location?.id})} + '\''"/>
     <attr sel="#backToLocations" th:onclick="'location.href=\'' + @{/admin/locations} + '\''"/>
     <attr sel="#newEvent" th:if="${location} != null"

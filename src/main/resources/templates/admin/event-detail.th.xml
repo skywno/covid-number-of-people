@@ -1,19 +1,22 @@
 <?xml version="1.0"?>
 <thlogic>
-    <attr sel="#eventTitle" th:text="'이벤트 상세 - 관리자(' + ${adminOperationStatus.message} + ')'" />
+    <attr sel="#eventTitle" th:text="'이벤트 상세 - 관리자(' + ${adminOperationStatus.message} + ')'"/>
     <attr sel="#eventTable">
-        <attr sel="#locationName" th:value="*{event?.locationName}" />
-        <attr sel="#eventName" th:value="*{event?.eventName}" />
+        <attr sel="#locationName" th:value="*{event?.locationName}"/>
+        <attr sel="#eventName" th:value="*{event?.eventName}"/>
         <attr sel="#eventStatus" th:remove="all-but-first">
-            <attr sel="option" th:each="status : ${eventStatusOption}" th:value="${status}" th:text="${status}" />
+            <attr sel="option" th:each="status : ${eventStatusOption}" th:value="${status}" th:text="${status}"/>
         </attr>
-        <attr sel="#eventStartDateTime" th:value="*{event?.eventStartDateTime}" />
-        <attr sel="#eventEndDateTime" th:value="*{event?.eventEndDateTime}" />
-        <attr sel="#currentNumberOfPeople" th:value="*{event?.currentNumberOfPeople}" />
-        <attr sel="#capacity" th:value="*{event?.capacity}" />
+        <attr sel="#eventStartDateTime" th:value="*{event?.eventStartDateTime}"/>
+        <attr sel="#eventEndDateTime" th:value="*{event?.eventEndDateTime}"/>
+        <attr sel="#currentNumberOfPeople" th:value="*{event?.currentNumberOfPeople}"/>
+        <attr sel="#capacity" th:value="*{event?.capacity}"/>
     </attr>
-    <attr sel="#eventId" th:value="${event?.id}" />
-    <attr sel="#saveEvent" th:form="eventForm" th:formaction="@{/admin/locations/{locationId}/events(locationId=${event?.location.id})}" th:formmethod="post" />
-    <attr sel="#deleteEvent"  th:onclick="'location.href=\'' + @{/admin/events/{eventId}/delete(eventId=${event?.id})} + '\''"/>
-    <attr sel="#backToEvents" th:onclick="'location.href=\'' + @{/admin/events} + '\''" />
+    <attr sel="#eventId" th:value="${event?.id}"/>
+    <attr sel="#saveEvent" th:form="eventForm"
+          th:formaction="@{/admin/locations/{locationId}/events(locationId=${event?.location.id})}"
+          th:formmethod="post"/>
+    <attr sel="#deleteEvent" th:if="${event?.id} != null"
+          th:onclick="'location.href=\'' + @{/admin/events/{eventId}/delete(eventId=${event?.id})} + '\''"/>
+    <attr sel="#backToEvents" th:onclick="'location.href=\'' + @{/admin/events} + '\''"/>
 </thlogic>
