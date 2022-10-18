@@ -3,6 +3,7 @@ package com.example.covid.service;
 
 import com.example.covid.constant.ErrorCode;
 import com.example.covid.domain.Location;
+import com.example.covid.dto.EventDto;
 import com.example.covid.dto.LocationDto;
 import com.example.covid.exception.GeneralException;
 import com.example.covid.repository.LocationRepository;
@@ -90,6 +91,17 @@ public class LocationService {
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }
+    }
 
+    public boolean upsertLocation(LocationDto locationDto){
+        try{
+            if (locationDto.id() != null){
+                return modifyLocation(locationDto.id(), locationDto);
+            } else {
+                return createLocation(locationDto);
+            }
+        } catch (Exception e){
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 }

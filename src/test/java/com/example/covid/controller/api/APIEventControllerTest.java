@@ -118,6 +118,7 @@ class APIEventControllerTest {
         // Given
         given(eventService.createEvent(any())).willReturn(true);
         EventRequest eventRequest = EventRequest.of(
+                1L,
                 "오후 운동",
                 EventStatus.OPENED,
                 LocalDateTime.of(2021, 1, 1, 13, 0, 0),
@@ -145,6 +146,7 @@ class APIEventControllerTest {
     void givenInvalidEvent_whenCreatingAnEvent_thenReturnsFailedStandardResponse() throws Exception {
         // Given
         EventRequest eventRequest = EventRequest.of(
+                1L,
                 "오후 운동",
                 EventStatus.OPENED,
                 LocalDateTime.of(2021, 1, 1, 13, 0, 0),
@@ -223,6 +225,7 @@ class APIEventControllerTest {
         long eventId = 1L;
         EventDto dto = createEventDto();
         EventRequest eventRequest = EventRequest.of(
+                1L,
                 "오후 운동",
                 EventStatus.OPENED,
                 LocalDateTime.of(2021, 1, 1, 13, 0, 0),
@@ -255,6 +258,7 @@ class APIEventControllerTest {
         long eventId = 1L;
         EventDto dto = createEventDto();
         EventRequest eventRequest = EventRequest.of(
+                1l,
                 null,
                 EventStatus.OPENED,
                 LocalDateTime.of(2021, 1, 1, 13, 0, 0),

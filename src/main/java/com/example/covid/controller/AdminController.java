@@ -77,13 +77,16 @@ public class AdminController {
 
     @ResponseStatus(HttpStatus.SEE_OTHER)
     @PostMapping("/locations")
-    public String createLocation(
+    public String upsertLocation(
             @Valid LocationRequest locationRequest,
             RedirectAttributes redirectAttributes
     ) {
-        locationService.createLocation(locationRequest.toDto());
+        AdminOperationStatus status = locationRequest.id() != null ?
+                AdminOperationStatus.UPDATE : AdminOperationStatus.CREATE;
+        locationService.upsertLocation(locationRequest.toDto());
+
         redirectAttributes.addFlashAttribute("adminOperationStatus",
-                AdminOperationStatus.CREATE);
+                status);
         redirectAttributes.addFlashAttribute("redirectUrl", "/admin/locations");
 
         return "redirect:/admin/confirm";
@@ -104,15 +107,16 @@ public class AdminController {
 
     @PostMapping("/locations/{locationId}/events")
     @ResponseStatus(HttpStatus.SEE_OTHER)
-    public String createEvent(
+    public String upsertEvent(
             @Valid EventRequest eventRequest,
             @PathVariable Long locationId,
             RedirectAttributes redirectAttributes
     ) {
-        eventService.createEvent(eventRequest.toDto(LocationDto.idOnly(locationId)));
+        AdminOperationStatus status = eventRequest.id() != null ? AdminOperationStatus.UPDATE : AdminOperationStatus.CREATE;
+        eventService.upsertEvent(eventRequest.toDto(LocationDto.idOnly(locationId)));
 
         redirectAttributes.addFlashAttribute("adminOperationStatus",
-                AdminOperationStatus.CREATE);
+                status);
         redirectAttributes.addFlashAttribute("redirectUrl",
                 "/admin/locations/" + locationId);
 

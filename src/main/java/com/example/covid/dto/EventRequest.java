@@ -7,6 +7,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public record EventRequest(
+        Long id,
         @NotBlank @Size(min = 2) String eventName,
         @NotNull EventStatus eventStatus,
         @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
@@ -15,6 +16,7 @@ public record EventRequest(
         @NotNull @Positive Integer capacity
 ) {
     public static EventRequest of(
+            Long id,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
@@ -23,6 +25,7 @@ public record EventRequest(
             Integer capacity
     ) {
         return new EventRequest(
+                id,
                 eventName,
                 eventStatus,
                 eventStartDatetime,
@@ -34,14 +37,14 @@ public record EventRequest(
 
     public EventDto toDto(LocationDto locationDto) {
         return EventDto.of(
-                null,
+                this.id(),
                 locationDto,
-                eventName,
-                eventStatus,
-                eventStartDateTime,
-                eventEndDateTime,
-                currentNumberOfPeople,
-                capacity,
+                this.eventName(),
+                this.eventStatus(),
+                this.eventStartDateTime(),
+                this.eventEndDateTime(),
+                this.currentNumberOfPeople(),
+                this.capacity(),
                 null,
                 null
         );

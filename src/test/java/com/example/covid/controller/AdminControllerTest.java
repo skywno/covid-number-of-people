@@ -141,10 +141,10 @@ class AdminControllerTest {
     @Test
     void givenNewLocation_whenSavingLocation_thenSavesLocationAndReturnsToListPage() throws Exception {
         // Given
-        LocationRequest lr = LocationRequest.of(LocationType.SPORTS, "강남 배드민턴장", "서울시" +
+        LocationRequest lr = LocationRequest.of(null, LocationType.SPORTS, "강남 배드민턴장", "서울시" +
                 " 강남구 강남동", "010-1231-2312", 10);
 
-        given(locationService.createLocation(lr.toDto()))
+        given(locationService.upsertLocation(lr.toDto()))
                 .willReturn(true);
         // When
         mvc.perform(post("/admin/locations")
@@ -158,7 +158,7 @@ class AdminControllerTest {
                 .andExpect(flash().attribute("redirectUrl", "/admin/locations"));
 
         // Then
-        then(locationService).should().createLocation(lr.toDto());
+        then(locationService).should().upsertLocation(lr.toDto());
     }
 
     @DisplayName("[view][GET] 어드민 페이지 - 이벤트 리스트 뷰")
@@ -225,7 +225,7 @@ class AdminControllerTest {
         then(eventService).should().getEvent(eventId);
     }
 
-    @DisplayName("[view][get] 어드민 페이지 - 새로운 이벤트 뷰")
+    @DisplayName("[view][get] 어드민 페이지 - 이벤트 새로만들기 뷰")
     @Test
     void givenNothing_whenRequestingNewEventPage_thenReturnsNewEventPage() throws Exception {
         // Given
@@ -254,10 +254,10 @@ class AdminControllerTest {
     @Test
     void givenEventRequest_whenCreatingNewEvent_thenSavesEventAndReturnsToListPage() throws Exception {
         long locationId = 1L;
-        EventRequest eventRequest = EventRequest.of("test Event", EventStatus.OPENED,
+        EventRequest eventRequest = EventRequest.of(null, "test Event", EventStatus.OPENED,
                 LocalDateTime.now(), LocalDateTime.now(), 10, 10);
 
-        given(eventService.createEvent(eventRequest.toDto(LocationDto.idOnly(locationId))))
+        given(eventService.upsertEvent(eventRequest.toDto(LocationDto.idOnly(locationId))))
                 .willReturn(true);
 
         // When & Then
@@ -272,7 +272,7 @@ class AdminControllerTest {
                         AdminOperationStatus.CREATE))
                 .andDo(print());
 
-        then(eventService).should().createEvent(eventRequest.toDto(LocationDto.idOnly(locationId)));
+        then(eventService).should().upsertEvent(eventRequest.toDto(LocationDto.idOnly(locationId)));
 
     }
 

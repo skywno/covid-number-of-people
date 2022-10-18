@@ -12,6 +12,7 @@
               th:title="'전화번호 형식을 맞춰주세요 (ex: 000-0000-0000)\')'"/>
         <attr sel="#capacity" th:value="${location?.capacity}" th:min="0"/>
     </attr>
+    <attr sel="#locationId" th:value="${location?.id}" />
     <attr sel="#saveLocation" th:form="locationForm" th:formaction="@{/admin/locations}" th:formmethod="post"/>
     <attr sel="#backToLocations" th:onclick="'location.href=\'' + @{/admin/locations} + '\''"/>
     <attr sel="#newEvent" th:if="${location} != null"
