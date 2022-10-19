@@ -14,6 +14,7 @@
         <attr sel="#capacity" th:value="*{event?.capacity}"/>
     </attr>
     <attr sel="#eventId" th:value="${event?.id}"/>
+    <attr sel="#csrf" th:value="${_csrf.token}" th:name="${_csrf.parameterName}" />
     <attr sel="#saveEvent" th:form="eventForm"
           th:formaction="@{/admin/locations/{locationId}/events(locationId=${event?.location.id})}"
           th:formmethod="post"/>
