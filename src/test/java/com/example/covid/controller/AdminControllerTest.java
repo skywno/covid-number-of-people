@@ -1,5 +1,6 @@
 package com.example.covid.controller;
 
+import com.example.covid.config.SecurityConfig;
 import com.example.covid.constant.AdminOperationStatus;
 import com.example.covid.constant.EventStatus;
 import com.example.covid.constant.LocationType;
@@ -11,8 +12,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -36,7 +40,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(AdminController.class)
+@WebMvcTest(
+    controllers = AdminController.class,
+    excludeAutoConfiguration = SecurityAutoConfiguration.class,
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+)
 class AdminControllerTest {
 
     private final MockMvc mvc;
@@ -295,7 +303,7 @@ class AdminControllerTest {
                 .andExpect(status().isSeeOther())
                 .andExpect(view().name("redirect:/admin/confirm"))
                 .andExpect(flash().attribute("redirectUrl",
-                        "/admin/locations/" + locationId))
+                        "/admin/events"))
                 .andExpect(flash().attribute("adminOperationStatus",
                         AdminOperationStatus.CREATE))
                 .andDo(print());

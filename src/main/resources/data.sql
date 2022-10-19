@@ -39,7 +39,7 @@ values
 
 insert into admin (email, nickname, password, phone_number)
 values
-    ('test@test.com', '테스트', '1234', '010-0101-0101')
+    ('test@test.com', '테스트', '{noop}1234', '010-0101-0101')
 ;
 
 insert into admin_location_map (admin_id, location_id)
