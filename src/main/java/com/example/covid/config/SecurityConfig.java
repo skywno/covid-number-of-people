@@ -48,12 +48,13 @@ public class SecurityConfig {
                 .formLogin() // enable form based log in
                     .permitAll()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/admin/places")
+                    .defaultSuccessUrl("/admin/locations")
                 .and()
                 .logout()
                     .permitAll()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/");
+                    .logoutSuccessUrl("/locations")
+                    .logoutUrl("/logout");
+
         return http.build();
     }
 
