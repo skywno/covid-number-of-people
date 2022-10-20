@@ -56,6 +56,7 @@ class APILocationControllerTest {
     void geolocation_whenCreatingAllocation_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
         LocationRequest locationRequest = LocationRequest.of(
+                null,
                 LocationType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
@@ -119,6 +120,7 @@ class APILocationControllerTest {
         // Given
         long locationId = 1L;
         LocationRequest locationRequest = LocationRequest.of(
+                locationId,
                 LocationType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",

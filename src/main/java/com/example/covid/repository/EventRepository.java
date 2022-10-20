@@ -2,6 +2,7 @@ package com.example.covid.repository;
 
 import com.example.covid.constant.EventStatus;
 import com.example.covid.domain.Event;
+import com.example.covid.domain.Location;
 import com.example.covid.domain.QEvent;
 import com.example.covid.dto.EventDto;
 import com.querydsl.core.types.dsl.ComparableExpression;
@@ -22,7 +23,7 @@ public interface EventRepository extends
         QuerydslBinderCustomizer<QEvent>,
         EventRepositoryCustom
 {
-
+    Page<Event> findByLocation(Location location, Pageable pageable);
     @Override
     default void customize(QuerydslBindings bindings, QEvent root) {
         bindings.excludeUnlistedProperties(true);

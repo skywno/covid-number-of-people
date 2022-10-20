@@ -1,18 +1,24 @@
 package com.example.covid.controller;
 
+import com.example.covid.config.SecurityConfig;
 import com.example.covid.constant.EventStatus;
+import com.example.covid.dto.EventDto;
 import com.example.covid.service.EventService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -21,7 +27,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(EventController.class)
+@WebMvcTest(
+        controllers = EventController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class,
+        excludeFilters = @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, classes= SecurityConfig.class)
+)
 class EventControllerTest {
 
     @MockBean private EventService eventService;
@@ -139,7 +149,7 @@ class EventControllerTest {
                                 .queryParam("page", "1")
                                 .queryParam("size", "3")
                 )
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("error"))
                 .andExpect(model().attributeDoesNotExist("events"));
@@ -150,6 +160,9 @@ class EventControllerTest {
     void givenNothing_whenRequestingEventDetailPage_thenReturnsEventDetailPage() throws Exception {
         /// Given
         Long eventId = 1L;
+        given(eventService.getEvent(eventId)).willReturn(Optional.of(EventDto.of(
+                1L, null, null, null, null, null, null, null, null, null)
+        ));
         // When
         mvc.perform(get("/events/"+eventId))
                 .andExpect(status().isOk())

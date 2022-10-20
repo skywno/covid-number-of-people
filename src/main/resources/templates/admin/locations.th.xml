@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<thlogic>
+    <attr sel="#logout" th:text="'로그아웃'" th:href="@{/logout}"/>
+    <attr sel="#locationTitle" th:text="'장소 목록 - 관리자'"/>
+    <attr sel="#locationTable">
+        <attr sel="tbody">
+            <attr sel="tr[0]" th:each="location : ${locations}">
+                <attr sel="td.locationName" th:text="${location.locationName}"/>
+                <attr sel="td.phoneNumber" th:text="${location.phoneNumber}"/>
+                <attr sel="td/a" th:text="'상세'" th:href="@{'/admin/locations/' + ${location.id}}"/>
+            </attr>
+        </attr>
+    </attr>
+    <attr sel="#newLocation" th:onclick="'window.location.href=\'' + @{/admin/locations/new} + '\''"/>
+</thlogic>

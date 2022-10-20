@@ -11,6 +11,6 @@ public class BaseController {
 
     @GetMapping("/")
     public String root() throws Exception {
-        return "index";
+        return "redirect:/events";
     }
 }

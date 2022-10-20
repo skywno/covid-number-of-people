@@ -17,6 +17,7 @@ public class APILocationController {
     @GetMapping
     public APIDataResponse<List<LocationResponse>> getLocations() {
         return APIDataResponse.of(List.of(LocationResponse.of(
+                1L,
                 LocationType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
@@ -41,6 +42,7 @@ public class APILocationController {
         }
 
         return APIDataResponse.of(LocationResponse.of(
+                1L,
                 LocationType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",

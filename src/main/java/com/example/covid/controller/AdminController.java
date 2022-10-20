@@ -1,96 +1,202 @@
 package com.example.covid.controller;
 
 
+import com.example.covid.constant.AdminOperationStatus;
+import com.example.covid.constant.ErrorCode;
 import com.example.covid.constant.EventStatus;
 import com.example.covid.constant.LocationType;
-import com.example.covid.dto.EventDto;
-import com.example.covid.dto.LocationDto;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.example.covid.domain.Event;
+import com.example.covid.domain.Location;
+import com.example.covid.dto.*;
+import com.example.covid.exception.GeneralException;
+import com.example.covid.service.EventService;
+import com.example.covid.service.LocationService;
+import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
+
+@Validated
+@RequiredArgsConstructor
 @RequestMapping("/admin")
 @Controller
 public class AdminController {
 
+    private final EventService eventService;
+    private final LocationService locationService;
+
     @GetMapping("/locations")
     public ModelAndView adminLocations(
-            LocationType locationType, String locationName, String address
+            @QuerydslPredicate(root = Location.class) Predicate predicate
     ) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("locationType", locationType);
-        model.put("locationName", locationName);
-        model.put("address", address);
 
-        return new ModelAndView("admin/locations", model);
+        List<LocationResponse> locations = locationService.getLocations(predicate)
+                .stream()
+                .map(LocationResponse::from)
+                .toList();
+
+        return new ModelAndView("admin/locations", Map.of(
+                "locations", locations,
+                "locationTypeOption", LocationType.values()
+        ));
     }
 
     @GetMapping("/locations/{locationId}")
-    public ModelAndView adminLocationDetail(@PathVariable Integer locationId) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("location", LocationDto.of(
-                1L,
-                LocationType.COMMON,
-                "랄라배드민턴장",
-                "서울시 강남구 강남대로 1234",
-                "010-1234-5678",
-                30,
-                LocalDateTime.now(),
-                LocalDateTime.now()
+    public ModelAndView adminLocationDetail(
+            @PathVariable Long locationId,
+            @PageableDefault Pageable pageable
+        ) {
+
+        LocationResponse location = locationService.getLocation(locationId)
+                .map(LocationResponse::from)
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
+
+        Page<EventViewResponse> events = eventService.getEvent(locationId, pageable);
+
+        return new ModelAndView("admin/location-detail", Map.of(
+                "adminOperationStatus", AdminOperationStatus.UPDATE,
+                "location", location,
+                "events", events,
+                "locationTypeOption", LocationType.values()
         ));
-        return new ModelAndView("admin/location-detail", map);    }
+    }
+
+    @GetMapping("/locations/new")
+    public String newLocation(Model model) {
+        model.addAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
+        model.addAttribute("locationTypeOption", LocationType.values());
+
+        return "admin/location-detail";
+    }
+
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @PostMapping("/locations")
+    public String upsertLocation(
+            @Valid LocationRequest locationRequest,
+            RedirectAttributes redirectAttributes
+    ) {
+        AdminOperationStatus status = locationRequest.id() != null ?
+                AdminOperationStatus.UPDATE : AdminOperationStatus.CREATE;
+        locationService.upsertLocation(locationRequest.toDto());
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus",
+                status);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/locations");
+
+        return "redirect:/admin/confirm";
+    }
+
+    @GetMapping("/locations/{locationId}/newEvent")
+    public String newEvent(@PathVariable Long locationId, Model model) {
+        EventResponse event = locationService.getLocation(locationId)
+                .map(EventResponse::empty)
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
+
+        model.addAttribute("adminOperationStatus", AdminOperationStatus.CREATE);
+        model.addAttribute("eventStatusOption", EventStatus.values());
+        model.addAttribute("event", event);
+
+        return "admin/event-detail";
+    }
+
+    @PostMapping("/locations/{locationId}/events")
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    public String upsertEvent(
+            @Valid EventRequest eventRequest,
+            @PathVariable Long locationId,
+            RedirectAttributes redirectAttributes
+    ) {
+        AdminOperationStatus status = eventRequest.id() != null ?
+                AdminOperationStatus.UPDATE : AdminOperationStatus.CREATE;
+        eventService.upsertEvent(eventRequest.toDto(LocationDto.idOnly(locationId)));
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus",
+                status);
+        redirectAttributes.addFlashAttribute("redirectUrl",
+                "/admin/events");
+
+        return "redirect:/admin/confirm";
+    }
 
     @GetMapping("/events")
     public ModelAndView adminEvents(
-            Long locationId,
-            String eventName,
-            EventStatus eventStatus,
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime
-                    eventStartDatetime,
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime
-                    eventEndDatetime
-            ) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("locationName", "location-" + locationId);
-        map.put("eventName", eventName);
-        map.put("eventStatus", eventStatus);
-        map.put("eventStartDatetime", eventStartDatetime);
-        map.put("eventEndDatetime", eventEndDatetime);
-        return new ModelAndView("admin/events", map);    }
+            @QuerydslPredicate(root = Event.class) Predicate predicate
+    ) {
+
+        List<EventResponse> responses = eventService.getEvents(predicate)
+                .stream().map(EventResponse::from)
+                .toList();
+
+        return new ModelAndView("admin/events", Map.of(
+                "events", responses,
+                "eventStatusOption", EventStatus.values()
+        ));
+    }
 
     @GetMapping("/events/{eventId}")
     public ModelAndView adminEventDetail(@PathVariable Long eventId) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("event", EventDto.of(
-                eventId,
-                LocationDto.of(
-                        1L,
-                        LocationType.SPORTS,
-                        "배드민턴장",
-                        "서울시 그리구 그래동",
-                        "010-2222-3333",
-                        33,
-                        LocalDateTime.now(),
-                        LocalDateTime.now()
-                ),
-                "오후 운동",
-                EventStatus.OPENED,
-                LocalDateTime.of(2021,1,1,13,0,0),
-                LocalDateTime.of(2021,1,1,16,0,0),
-                0,
-                24,
-                LocalDateTime.now(),
-                LocalDateTime.now()
+
+        EventResponse eventResponse = eventService.getEvent(eventId)
+                .map(EventResponse::from)
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
+
+        return new ModelAndView("admin/event-detail", Map.of(
+                "adminOperationStatus", AdminOperationStatus.UPDATE,
+                "event", eventResponse,
+                "eventStatusOption", EventStatus.values()
         ));
-        return new ModelAndView("admin/event-detail", map);
     }
 
+    @GetMapping("/confirm")
+    public String confirm(Model model) {
+        if (!model.containsAttribute("redirectUrl")) {
+            throw new GeneralException(ErrorCode.BAD_REQUEST);
+        }
 
+        return "admin/confirm";
+    }
+
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @GetMapping("/events/{eventId}/delete")
+    public String deleteEvent(
+            @PathVariable Long eventId,
+            RedirectAttributes redirectAttributes
+    ) {
+        eventService.removeEvent(eventId);
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus",
+                AdminOperationStatus.DELETE);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/events");
+
+        return "redirect:/admin/confirm";
+    }
+
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    @GetMapping("/locations/{locationId}/delete")
+    public String deleteLocation(
+            @PathVariable Long locationId,
+            RedirectAttributes redirectAttributes
+    ) {
+        locationService.removeLocation(locationId);
+
+        redirectAttributes.addFlashAttribute("adminOperationStatus",
+                AdminOperationStatus.DELETE);
+        redirectAttributes.addFlashAttribute("redirectUrl", "/admin/locations");
+
+        return "redirect:/admin/confirm";
+    }
 }

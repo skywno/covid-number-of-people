@@ -3,12 +3,14 @@ package com.example.covid.service;
 
 import com.example.covid.constant.ErrorCode;
 import com.example.covid.domain.Location;
+import com.example.covid.dto.EventDto;
 import com.example.covid.dto.LocationDto;
 import com.example.covid.exception.GeneralException;
 import com.example.covid.repository.LocationRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
 
+    @Transactional(readOnly = true)
     public List<LocationDto> getLocations(Predicate predicate) {
         try {
             return StreamSupport
@@ -34,6 +37,7 @@ public class LocationService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Optional<LocationDto> getLocation(Long locationId) {
         try {
             return locationRepository.findById(locationId)
@@ -43,6 +47,7 @@ public class LocationService {
         }
     }
 
+    @Transactional
     public boolean createLocation(LocationDto locationDto) {
         try {
             if (locationDto == null) {return false;}
@@ -54,6 +59,7 @@ public class LocationService {
         }
     }
 
+    @Transactional
     public boolean modifyLocation(Long locationId, LocationDto dto) {
         try {
             if (locationId == null || dto == null) {
@@ -69,6 +75,8 @@ public class LocationService {
         }
     }
 
+
+    @Transactional
     public boolean removeLocation(Long locationId) {
         try {
             if (locationId == null) return false;
@@ -83,6 +91,17 @@ public class LocationService {
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }
+    }
 
+    public boolean upsertLocation(LocationDto locationDto){
+        try{
+            if (locationDto.id() != null){
+                return modifyLocation(locationDto.id(), locationDto);
+            } else {
+                return createLocation(locationDto);
+            }
+        } catch (Exception e){
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 }
