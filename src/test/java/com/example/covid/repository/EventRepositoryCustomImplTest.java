@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import static org.mockito.BDDMockito.given;
 
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class EventRepositoryTest {
     private final EventRepository sut;
 
@@ -48,8 +50,8 @@ class EventRepositoryTest {
 
         // Then
         assertThat(eventPage.getTotalPages()).isEqualTo(1);
-        assertThat(eventPage.getNumberOfElements()).isEqualTo(1);
-        assertThat(eventPage.getTotalElements()).isEqualTo(1);
+        assertThat(eventPage.getNumberOfElements()).isEqualTo(2);
+        assertThat(eventPage.getTotalElements()).isEqualTo(2);
         assertThat(eventPage.getContent().get(0))
                 .hasFieldOrPropertyWithValue("locationName", "패캠 레스토랑")
                 .hasFieldOrPropertyWithValue("eventName", "행사1")
