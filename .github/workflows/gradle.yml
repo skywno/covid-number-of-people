@@ -21,9 +21,9 @@ jobs:
     steps:
     - shell: bash
       env:
-        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+        STACKHERO_POSTGRESQL_ADMIN_PASSWORD: ${{ secrets.STACKHERO_POSTGRESQL_ADMIN_PASSWORD }}
       run: |
-        echo "$VAULT_TOKEN"
+        echo "$STACKHERO_POSTGRESQL_ADMIN_PASSWORD"
     - uses: actions/checkout@v3
     - name: Set up JDK 17
       uses: actions/setup-java@v3
